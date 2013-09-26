@@ -182,15 +182,6 @@
     <ClInclude Include="AboutForm.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\cryptology\aes.h">
-      <Filter>cryptology</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\cryptology\des.h">
-      <Filter>cryptology</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\cryptology\sha2.h">
-      <Filter>cryptology</Filter>
-    </ClInclude>
     <ClInclude Include="CryptForm.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -205,9 +196,6 @@
     </ClInclude>
     <ClInclude Include="MainModel.h">
       <Filter>cfg</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\cryptology\Crypt.h">
-      <Filter>cryptology</Filter>
     </ClInclude>
     <ClInclude Include="..\..\df\FileBin.h">
       <Filter>df</Filter>
@@ -230,6 +218,21 @@
     <ClInclude Include="..\..\df\MemPool.hpp">
       <Filter>df</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\df\cryptology\aes.h">
+      <Filter>cryptology</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\df\cryptology\Crypt.h">
+      <Filter>cryptology</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\df\cryptology\des.h">
+      <Filter>cryptology</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\df\cryptology\sha2.h">
+      <Filter>cryptology</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\df\cryptology\StdAfx.h">
+      <Filter>cryptology</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -247,15 +250,6 @@
     <ClCompile Include="AboutForm.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\cryptology\aes.cpp">
-      <Filter>cryptology</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\cryptology\des.cpp">
-      <Filter>cryptology</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\cryptology\sha2.cpp">
-      <Filter>cryptology</Filter>
-    </ClCompile>
     <ClCompile Include="CryptForm.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
@@ -267,6 +261,15 @@
     </ClCompile>
     <ClCompile Include="MainSocket.cpp">
       <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\df\cryptology\aes.cpp">
+      <Filter>cryptology</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\df\cryptology\des.cpp">
+      <Filter>cryptology</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\df\cryptology\sha2.cpp">
+      <Filter>cryptology</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

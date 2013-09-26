@@ -1,7 +1,7 @@
 #include "StdAfx.h"
 #include "CryptForm.h"
 
-#include "../../cryptology/Crypt.h"
+#include "../../df/cryptology/Crypt.h"
 
 
 CryptForm::CryptForm(void)

@@ -81,10 +81,6 @@
     <None Include="image\Monitor.ico" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\cryptology\aes.h" />
-    <ClInclude Include="..\..\cryptology\Crypt.h" />
-    <ClInclude Include="..\..\cryptology\des.h" />
-    <ClInclude Include="..\..\cryptology\sha2.h" />
     <ClInclude Include="..\..\df\atom.h" />
     <ClInclude Include="..\..\df\BaseChar.h" />
     <ClInclude Include="..\..\df\BaseSocket.h" />
@@ -94,6 +90,11 @@
     <ClInclude Include="..\..\df\CharConvert.h" />
     <ClInclude Include="..\..\df\Config.h" />
     <ClInclude Include="..\..\df\ConvertString.h" />
+    <ClInclude Include="..\..\df\cryptology\aes.h" />
+    <ClInclude Include="..\..\df\cryptology\Crypt.h" />
+    <ClInclude Include="..\..\df\cryptology\des.h" />
+    <ClInclude Include="..\..\df\cryptology\sha2.h" />
+    <ClInclude Include="..\..\df\cryptology\StdAfx.h" />
     <ClInclude Include="..\..\df\df.h" />
     <ClInclude Include="..\..\df\digital.h" />
     <ClInclude Include="..\..\df\Dir.h" />
@@ -148,9 +149,9 @@
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\cryptology\aes.cpp" />
-    <ClCompile Include="..\..\cryptology\des.cpp" />
-    <ClCompile Include="..\..\cryptology\sha2.cpp" />
+    <ClCompile Include="..\..\df\cryptology\aes.cpp" />
+    <ClCompile Include="..\..\df\cryptology\des.cpp" />
+    <ClCompile Include="..\..\df\cryptology\sha2.cpp" />
     <ClCompile Include="..\..\df\df.cpp" />
     <ClCompile Include="..\..\df\IocpSocket.cpp" />
     <ClCompile Include="..\..\window\Window.cpp" />

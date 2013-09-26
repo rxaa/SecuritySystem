@@ -9,7 +9,7 @@ obj_suffix=.o
 #资源文件
 res_file=SecuritySystem.rc
 
-VPATH = ../../../window:../../../cryptology:../../../df
+VPATH = ../../../window:../../../df:../../../df/cryptology
 other_objs =$(obj_menu)sha2.o $(obj_menu)des.o $(obj_menu)aes.o $(obj_menu)Window.o $(obj_menu)df.o $(obj_menu)IocpSocket.o 
 
 files =$(wildcard $(cpp_menu)*$(source_suffix))
