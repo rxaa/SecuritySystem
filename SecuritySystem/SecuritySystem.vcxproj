@@ -1,0 +1,181 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{DBAE903C-5231-4EA3-B4C8-90248E0A6ABE}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>SecuritySystem</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v120_xp</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level4</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level4</WarningLevel>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ExceptionHandling>Async</ExceptionHandling>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <None Include="image\back.bmp" />
+    <None Include="image\Monitor.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\cryptology\aes.h" />
+    <ClInclude Include="..\..\cryptology\Crypt.h" />
+    <ClInclude Include="..\..\cryptology\des.h" />
+    <ClInclude Include="..\..\cryptology\sha2.h" />
+    <ClInclude Include="..\..\df\atom.h" />
+    <ClInclude Include="..\..\df\BaseChar.h" />
+    <ClInclude Include="..\..\df\BaseSocket.h" />
+    <ClInclude Include="..\..\df\BaseString.h" />
+    <ClInclude Include="..\..\df\BaseStringOperator.h" />
+    <ClInclude Include="..\..\df\BaseStringOperator2.h" />
+    <ClInclude Include="..\..\df\CharConvert.h" />
+    <ClInclude Include="..\..\df\Config.h" />
+    <ClInclude Include="..\..\df\ConvertString.h" />
+    <ClInclude Include="..\..\df\df.h" />
+    <ClInclude Include="..\..\df\digital.h" />
+    <ClInclude Include="..\..\df\Dir.h" />
+    <ClInclude Include="..\..\df\Dir.hpp" />
+    <ClInclude Include="..\..\df\ErrLog.h" />
+    <ClInclude Include="..\..\df\Event.h" />
+    <ClInclude Include="..\..\df\File.h" />
+    <ClInclude Include="..\..\df\File.hpp" />
+    <ClInclude Include="..\..\df\FileBin.h" />
+    <ClInclude Include="..\..\df\IocpSocket.h" />
+    <ClInclude Include="..\..\df\List.h" />
+    <ClInclude Include="..\..\df\Lock.h" />
+    <ClInclude Include="..\..\df\MallocAllocator.h" />
+    <ClInclude Include="..\..\df\MemPool.h" />
+    <ClInclude Include="..\..\df\MemPool.hpp" />
+    <ClInclude Include="..\..\df\MyMacro.h" />
+    <ClInclude Include="..\..\df\Reflection.h" />
+    <ClInclude Include="..\..\df\ScopeGuard.h" />
+    <ClInclude Include="..\..\df\SEH.h" />
+    <ClInclude Include="..\..\df\ShareP.h" />
+    <ClInclude Include="..\..\df\StdAfx.h" />
+    <ClInclude Include="..\..\df\StringBuf.h" />
+    <ClInclude Include="..\..\df\SyncQueue.h" />
+    <ClInclude Include="..\..\df\targetver.h" />
+    <ClInclude Include="..\..\df\Thread.h" />
+    <ClInclude Include="..\..\df\TickCLock.h" />
+    <ClInclude Include="..\..\df\Utest.h" />
+    <ClInclude Include="..\..\window\Bitmap.h" />
+    <ClInclude Include="..\..\window\Button.h" />
+    <ClInclude Include="..\..\window\ChoiceBox.h" />
+    <ClInclude Include="..\..\window\ComBox.h" />
+    <ClInclude Include="..\..\window\Control.h" />
+    <ClInclude Include="..\..\window\Font.h" />
+    <ClInclude Include="..\..\window\Gdi.h" />
+    <ClInclude Include="..\..\window\gdiP.h" />
+    <ClInclude Include="..\..\window\ImageList.h" />
+    <ClInclude Include="..\..\window\ListBox.h" />
+    <ClInclude Include="..\..\window\ListView.h" />
+    <ClInclude Include="..\..\window\StdAfx.h" />
+    <ClInclude Include="..\..\window\TabControl.h" />
+    <ClInclude Include="..\..\window\TextBox.h" />
+    <ClInclude Include="..\..\window\Tray.h" />
+    <ClInclude Include="..\..\window\Window.h" />
+    <ClInclude Include="AboutForm.h" />
+    <ClInclude Include="CryptForm.h" />
+    <ClInclude Include="G.h" />
+    <ClInclude Include="MainModel.h" />
+    <ClInclude Include="MainForm.h" />
+    <ClInclude Include="MainSocket.h" />
+    <ClInclude Include="Resource.h" />
+    <ClInclude Include="SecuritySystem.h" />
+    <ClInclude Include="stdafx.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\cryptology\aes.cpp" />
+    <ClCompile Include="..\..\cryptology\des.cpp" />
+    <ClCompile Include="..\..\cryptology\sha2.cpp" />
+    <ClCompile Include="..\..\df\df.cpp" />
+    <ClCompile Include="..\..\df\IocpSocket.cpp" />
+    <ClCompile Include="..\..\window\Window.cpp" />
+    <ClCompile Include="AboutForm.cpp" />
+    <ClCompile Include="CryptForm.cpp" />
+    <ClCompile Include="MainForm.cpp" />
+    <ClCompile Include="MainSocket.cpp" />
+    <ClCompile Include="SecuritySystem.cpp" />
+    <ClCompile Include="stdafx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="SecuritySystem.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Manifest Include="xp.manifest" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="image\folder.bmp" />
+    <Image Include="image\hdd.bmp" />
+    <Image Include="image\text.bmp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

@@ -1,0 +1,291 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="源文件">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="头文件">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="资源文件">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Window">
+      <UniqueIdentifier>{2e4c6377-92eb-4803-a013-f18170711602}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="df">
+      <UniqueIdentifier>{579b9161-37fd-4b8f-b189-34960d52a688}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="cryptology">
+      <UniqueIdentifier>{013b46fd-9833-4184-82da-e3ee0b86441a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="cfg">
+      <UniqueIdentifier>{aef3a3df-fe9d-4a1c-b855-38b9e89698f9}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="image\back.bmp">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="image\Monitor.ico">
+      <Filter>资源文件</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="stdafx.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="SecuritySystem.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\window\Bitmap.h">
+      <Filter>Window</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\window\Button.h">
+      <Filter>Window</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\window\ChoiceBox.h">
+      <Filter>Window</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\window\ComBox.h">
+      <Filter>Window</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\window\Control.h">
+      <Filter>Window</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\window\Gdi.h">
+      <Filter>Window</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\window\gdiP.h">
+      <Filter>Window</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\window\ListBox.h">
+      <Filter>Window</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\window\ListView.h">
+      <Filter>Window</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\window\StdAfx.h">
+      <Filter>Window</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\window\TabControl.h">
+      <Filter>Window</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\window\TextBox.h">
+      <Filter>Window</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\window\Tray.h">
+      <Filter>Window</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\window\Window.h">
+      <Filter>Window</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\df\atom.h">
+      <Filter>df</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\df\BaseChar.h">
+      <Filter>df</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\df\BaseString.h">
+      <Filter>df</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\df\BaseStringOperator.h">
+      <Filter>df</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\df\BaseStringOperator2.h">
+      <Filter>df</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\df\CharConvert.h">
+      <Filter>df</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\df\Config.h">
+      <Filter>df</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\df\ConvertString.h">
+      <Filter>df</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\df\df.h">
+      <Filter>df</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\df\digital.h">
+      <Filter>df</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\df\Dir.h">
+      <Filter>df</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\df\Dir.hpp">
+      <Filter>df</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\df\ErrLog.h">
+      <Filter>df</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\df\Event.h">
+      <Filter>df</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\df\File.h">
+      <Filter>df</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\df\File.hpp">
+      <Filter>df</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\df\List.h">
+      <Filter>df</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\df\Lock.h">
+      <Filter>df</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\df\MallocAllocator.h">
+      <Filter>df</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\df\MemPool.h">
+      <Filter>df</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\df\MyMacro.h">
+      <Filter>df</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\df\Reflection.h">
+      <Filter>df</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\df\ScopeGuard.h">
+      <Filter>df</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\df\SEH.h">
+      <Filter>df</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\df\ShareP.h">
+      <Filter>df</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\df\SyncQueue.h">
+      <Filter>df</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\df\targetver.h">
+      <Filter>df</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\df\Thread.h">
+      <Filter>df</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\df\TickCLock.h">
+      <Filter>df</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\df\Utest.h">
+      <Filter>df</Filter>
+    </ClInclude>
+    <ClInclude Include="MainForm.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="AboutForm.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\cryptology\aes.h">
+      <Filter>cryptology</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\cryptology\des.h">
+      <Filter>cryptology</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\cryptology\sha2.h">
+      <Filter>cryptology</Filter>
+    </ClInclude>
+    <ClInclude Include="CryptForm.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\df\StringBuf.h">
+      <Filter>df</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\window\ImageList.h">
+      <Filter>Window</Filter>
+    </ClInclude>
+    <ClInclude Include="G.h">
+      <Filter>cfg</Filter>
+    </ClInclude>
+    <ClInclude Include="MainModel.h">
+      <Filter>cfg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\cryptology\Crypt.h">
+      <Filter>cryptology</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\df\FileBin.h">
+      <Filter>df</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\df\StdAfx.h">
+      <Filter>df</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\window\Font.h">
+      <Filter>Window</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\df\IocpSocket.h">
+      <Filter>df</Filter>
+    </ClInclude>
+    <ClInclude Include="MainSocket.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\df\BaseSocket.h">
+      <Filter>df</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\df\MemPool.hpp">
+      <Filter>df</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="SecuritySystem.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\window\Window.cpp">
+      <Filter>Window</Filter>
+    </ClCompile>
+    <ClCompile Include="MainForm.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="AboutForm.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\cryptology\aes.cpp">
+      <Filter>cryptology</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\cryptology\des.cpp">
+      <Filter>cryptology</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\cryptology\sha2.cpp">
+      <Filter>cryptology</Filter>
+    </ClCompile>
+    <ClCompile Include="CryptForm.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\df\df.cpp">
+      <Filter>df</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\df\IocpSocket.cpp">
+      <Filter>df</Filter>
+    </ClCompile>
+    <ClCompile Include="MainSocket.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="SecuritySystem.rc">
+      <Filter>资源文件</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Manifest Include="xp.manifest" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="image\folder.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="image\hdd.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="image\text.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+  </ItemGroup>
+</Project>
