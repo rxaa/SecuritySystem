@@ -1,5 +1,6 @@
 #pragma once
 
+
 class MainForm :
 	public Window
 {
@@ -16,7 +17,7 @@ public:
 	ListView viewHost_;
 	Control hostCount_;
 
-
+	df::ConnectPtr con_;
 
 	Tray tary_;
 

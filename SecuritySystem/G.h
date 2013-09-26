@@ -1,17 +1,23 @@
 #pragma once
 #include "MainModel.h"
+#include "MainSocket.h"
 
 class G
 {
 private:
 	static df::Config mainIni_;
+	static const int defaultPort_ = 19836;
 
 public:
 	static MainModel main;
+	static MainSocket sock;
 
 	static bool ReadMain()
 	{
-		return mainIni_.ReadToObject(main);
+		bool res=mainIni_.ReadToObject(main);
+		if (G::main.listen_port == 0)
+			G::main.listen_port = defaultPort_;
+		return res;
 	}
 
 	static bool WriteMain()

@@ -21,8 +21,10 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 	COUT(sizeof(df::IocpConnecter));
 
 
-
 	G::ReadMain();
+	G::sock.SetPort(G::main.listen_port);
+	G::sock.Listen();
+	
 	if (G::main.hide_window)
 	{
 	}

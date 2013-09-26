@@ -20,6 +20,7 @@ void MainForm::OnInit()
 	buttonConnect_.Init(IDOK);
 	buttonConnect_.onDraw_ = Button::GreenButton;
 	buttonConnect_.onClick_ = [&](){
+		con_=G::sock.Connect(tcc_("127.0.0.1"));
 	};
 
 	buttionFile_.Init(IDC_BUTTON1);
@@ -28,6 +29,14 @@ void MainForm::OnInit()
 	buttonProcManag_.Init(IDC_BUTTON4);
 
 	buttonDisconnect_.onDraw_ = Button::OrangeButton;
+	buttonDisconnect_.onClick_ = [&](){
+		if (con_)
+		{
+			con_->Close();
+			//con_.Release();
+		}
+			
+	};
 
 	viewHost_.Init(IDC_LIST1);
 	viewHost_.AddColumn(cct_("UID"));

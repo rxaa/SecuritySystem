@@ -7,5 +7,7 @@
 // TODO: 在 STDAFX.H 中
 // 引用任何所需的附加头文件，而不是在此文件中引用
 
-df::Config G::mainIni_(tt_("main.ini"));
-MainModel G::main;
+df::Config G::mainIni_(tt_("SecuritySystemMain.ini"));
+MainModel G::main{ tcc_(""), false, defaultPort_ };
+
+MainSocket G::sock;
