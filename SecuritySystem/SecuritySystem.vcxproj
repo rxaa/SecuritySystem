@@ -140,6 +140,8 @@
     <ClInclude Include="..\..\window\Window.h" />
     <ClInclude Include="AboutForm.h" />
     <ClInclude Include="CryptForm.h" />
+    <ClInclude Include="FormConnect.h" />
+    <ClInclude Include="FormLoad.h" />
     <ClInclude Include="G.h" />
     <ClInclude Include="MainModel.h" />
     <ClInclude Include="MainForm.h" />
@@ -157,6 +159,8 @@
     <ClCompile Include="..\..\window\Window.cpp" />
     <ClCompile Include="AboutForm.cpp" />
     <ClCompile Include="CryptForm.cpp" />
+    <ClCompile Include="FormConnect.cpp" />
+    <ClCompile Include="FormLoad.cpp" />
     <ClCompile Include="MainForm.cpp" />
     <ClCompile Include="MainSocket.cpp" />
     <ClCompile Include="SecuritySystem.cpp" />
@@ -174,6 +178,7 @@
   <ItemGroup>
     <Image Include="image\folder.bmp" />
     <Image Include="image\hdd.bmp" />
+    <Image Include="image\load.png" />
     <Image Include="image\text.bmp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

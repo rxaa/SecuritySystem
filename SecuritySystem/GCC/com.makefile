@@ -17,7 +17,7 @@ objects = $(files:$(cpp_menu)%$(source_suffix)=$(obj_menu)%$(obj_suffix))
 
 #Á´½Ó
 $(app_name): $(objects) $(obj_menu)resource.res $(other_objs)
-	g++ -o $(app_name) $(objects) $(obj_menu)resource.res $(other_objs) -s -static -l gdi32 -l user32 -l kernel32 -l comctl32 -l msimg32 -l gdiplus -l comctl32 -l Ws2_32  -mwindows
+	g++ -o $(app_name) $(objects) $(obj_menu)resource.res $(other_objs) -s -static -l gdi32 -l user32 -l kernel32 -l comctl32 -l msimg32 -l gdiplus -l comctl32 -l Ws2_32 -l ole32  -mwindows
 
 	
 all: $(other_objs)

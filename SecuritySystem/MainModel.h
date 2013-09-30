@@ -16,4 +16,8 @@ public:
 	META_DATA_INIT;
 };
 
-META_DATA_MEMBER_3(MainModel, file_crypt_init_menu, hide_window, listen_port);
+META_DATA_MEMBER_3(MainModel
+	, file_crypt_init_menu
+	, hide_window
+	, listen_port
+	);

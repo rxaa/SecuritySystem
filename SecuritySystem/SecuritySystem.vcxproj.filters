@@ -19,11 +19,11 @@
     <Filter Include="df">
       <UniqueIdentifier>{579b9161-37fd-4b8f-b189-34960d52a688}</UniqueIdentifier>
     </Filter>
-    <Filter Include="cryptology">
-      <UniqueIdentifier>{013b46fd-9833-4184-82da-e3ee0b86441a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="cfg">
       <UniqueIdentifier>{aef3a3df-fe9d-4a1c-b855-38b9e89698f9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="df\cryptology">
+      <UniqueIdentifier>{013b46fd-9833-4184-82da-e3ee0b86441a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -219,19 +219,25 @@
       <Filter>df</Filter>
     </ClInclude>
     <ClInclude Include="..\..\df\cryptology\aes.h">
-      <Filter>cryptology</Filter>
+      <Filter>df\cryptology</Filter>
     </ClInclude>
     <ClInclude Include="..\..\df\cryptology\Crypt.h">
-      <Filter>cryptology</Filter>
+      <Filter>df\cryptology</Filter>
     </ClInclude>
     <ClInclude Include="..\..\df\cryptology\des.h">
-      <Filter>cryptology</Filter>
+      <Filter>df\cryptology</Filter>
     </ClInclude>
     <ClInclude Include="..\..\df\cryptology\sha2.h">
-      <Filter>cryptology</Filter>
+      <Filter>df\cryptology</Filter>
     </ClInclude>
     <ClInclude Include="..\..\df\cryptology\StdAfx.h">
-      <Filter>cryptology</Filter>
+      <Filter>df\cryptology</Filter>
+    </ClInclude>
+    <ClInclude Include="FormConnect.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="FormLoad.h">
+      <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -263,13 +269,19 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="..\..\df\cryptology\aes.cpp">
-      <Filter>cryptology</Filter>
+      <Filter>df\cryptology</Filter>
     </ClCompile>
     <ClCompile Include="..\..\df\cryptology\des.cpp">
-      <Filter>cryptology</Filter>
+      <Filter>df\cryptology</Filter>
     </ClCompile>
     <ClCompile Include="..\..\df\cryptology\sha2.cpp">
-      <Filter>cryptology</Filter>
+      <Filter>df\cryptology</Filter>
+    </ClCompile>
+    <ClCompile Include="FormConnect.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="FormLoad.cpp">
+      <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -288,6 +300,9 @@
       <Filter>资源文件</Filter>
     </Image>
     <Image Include="image\text.bmp">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="image\load.png">
       <Filter>资源文件</Filter>
     </Image>
   </ItemGroup>
