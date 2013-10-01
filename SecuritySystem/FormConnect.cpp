@@ -15,8 +15,19 @@ FormConnect::~FormConnect()
 void FormConnect::OnInit()
 {
 	butOK_.Init(IDOK);
-	butOK_.onDraw_ = Button::GreenButton;
+	textHostName_.Init(IDC_EDIT1);
+
 	butOK_.onClick_ = [&]{
-		NewWindow < FormLoad>()->OpenModal(this);
+
+		if (textHostName_.GetText() == tcc_(""))
+		{
+			PopMessage(tcc_("请输入主机地址!"));
+			textHostName_.SetFocus();
+			return;
+		}
+
+		FormLoad::RunAsync(tcc_("正在连接..."), this, [=](FormLoad & form){
+			Sleep(2000);
+		});
 	};
 }

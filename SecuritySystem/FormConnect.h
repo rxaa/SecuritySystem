@@ -8,6 +8,7 @@ public:
 	~FormConnect();
 
 	Button butOK_;
+	Control textHostName_;
 
 	void OnInit() override;
 };

@@ -13,7 +13,7 @@ CryptForm::CryptForm(void)
 
 CryptForm::~CryptForm(void)
 {
-	G::WriteMain();
+	G::WriteMainIni();
 }
 
 void CryptForm::OnInit()

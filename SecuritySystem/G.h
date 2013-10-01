@@ -12,7 +12,7 @@ public:
 	static MainModel main;
 	static MainSocket sock;
 
-	static bool ReadMain()
+	static bool ReadMainIni()
 	{
 		bool res=mainIni_.ReadToObject(main);
 		if (G::main.listen_port == 0)
@@ -20,7 +20,7 @@ public:
 		return res;
 	}
 
-	static bool WriteMain()
+	static bool WriteMainIni()
 	{
 		return mainIni_.WriteFromObject(main);
 	}

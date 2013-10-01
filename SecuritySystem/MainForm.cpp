@@ -32,7 +32,7 @@ void MainForm::OnInit()
 	buttonDisconnect_.onDraw_ = Button::OrangeButton;
 	buttonDisconnect_.onClick_ = [&](){
 
-			
+
 	};
 
 	viewHost_.Init(IDC_LIST1);
@@ -61,6 +61,7 @@ void MainForm::OnInit()
 	onClose_ = [&]{
 		Hide();
 	};
+
 	AddEvent(IDM_EXIT, [&]{
 		Close(true);
 	});

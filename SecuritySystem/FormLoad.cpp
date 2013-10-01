@@ -15,6 +15,7 @@ FormLoad::~FormLoad()
 void FormLoad::OnInit()
 {
 	picI_ = 0;
+	contentText_ = tcc_("正在连接......");
 	if (!pic_.Load(IDB_PNG1))
 	{
 		PopMessage(tcc_("图片加载失败!"));
@@ -31,8 +32,8 @@ void FormLoad::OnInit()
 
 void FormLoad::OnPaint()
 {
-	pic_.DrawAlphaTo(gdi_, 50, 30, 31, 31,0,picI_*31);
-	gdi_.Txt(90, 35, tcc_("正在连接......"));
+	pic_.DrawAlphaTo(gdi_, 50, 30, 31, 31, 0, picI_ * 31);
+	gdi_.Txt(90, 35, contentText_);
 }
 
 void FormLoad::OnTimer(uint)
@@ -41,4 +42,17 @@ void FormLoad::OnTimer(uint)
 	if (picI_ >= picCount_)
 		picI_ = 0;
 	OnPaint();
+}
+
+void FormLoad::RunAsync(CC msg, WinHandle win, std::function<void(FormLoad &)> form)
+{
+	df::IntoPtr<FormLoad> loadPtr = NewWindow<FormLoad>();
+	loadPtr->contentText_ = msg;
+	df::AsyncStart([=]{
+
+		form(*loadPtr.Get());
+
+		loadPtr->onClose_();
+	});
+	loadPtr->OpenModal(win.handle_);
 }

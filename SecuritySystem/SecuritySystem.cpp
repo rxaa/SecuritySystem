@@ -3,7 +3,6 @@
 
 #include "stdafx.h"
 #include "SecuritySystem.h"
-#include "../../df/IocpSocket.h"
 
 
 int APIENTRY _tWinMain(HINSTANCE hInstance,
@@ -18,11 +17,10 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 	}
 	df::Init(hInstance);
 
-	COUT(sizeof(df::IocpConnecter));
 
-	G::ReadMain();
+	G::ReadMainIni();
 	G::sock.SetPort(G::main.listen_port);
-	//G::sock.Listen();
+	G::sock.Listen();
 	
 	if (G::main.hide_window)
 	{
