@@ -26,7 +26,7 @@ void FormConnect::OnInit()
 			return;
 		}
 
-		FormLoad::RunAsync(tcc_("正在连接..."), this, [=](FormLoad & form){
+		FormLoad::RunAsync(tcc_("正在连接中..."), this, [=](FormLoad & form){
 			Sleep(2000);
 		});
 	};

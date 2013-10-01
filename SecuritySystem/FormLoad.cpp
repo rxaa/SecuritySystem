@@ -15,7 +15,6 @@ FormLoad::~FormLoad()
 void FormLoad::OnInit()
 {
 	picI_ = 0;
-	contentText_ = tcc_("正在连接......");
 	if (!pic_.Load(IDB_PNG1))
 	{
 		PopMessage(tcc_("图片加载失败!"));
