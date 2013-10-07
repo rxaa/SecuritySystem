@@ -19,8 +19,22 @@ public:
 	void OnInit() override;
 	void OnPaint() override;
 	void OnTimer(uint id) override;
+	
+	template<class LamT>
+	static void RunAsync(CC msg, WinHandle win, LamT lam)
+	{
+		auto loadPtr = NewWindow<FormLoad>();
+		loadPtr->contentText_ = msg;
 
-	static void RunAsync(CC msg, WinHandle win,std::function<void(FormLoad &)>);
+		df::AsyncStart([=]{
+
+			lam(*loadPtr.Get());
+
+			loadPtr->onClose_();
+		});
+
+		loadPtr->OpenModal(win.handle_);
+	}
 
 };
 

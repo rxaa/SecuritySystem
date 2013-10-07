@@ -9,6 +9,7 @@ public:
 
 	Button butOK_;
 	Control textHostName_;
+	Control textPSW_;
 
 	void OnInit() override;
 };

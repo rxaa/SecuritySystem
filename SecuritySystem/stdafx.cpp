@@ -9,5 +9,3 @@
 
 df::Config G::mainIni_(tt_("SecuritySystemMain.ini"));
 MainModel G::main{ tcc_(""), false, defaultPort_ };
-
-MainSocket G::sock;

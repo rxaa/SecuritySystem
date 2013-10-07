@@ -15,7 +15,8 @@ FormConnect::~FormConnect()
 void FormConnect::OnInit()
 {
 	butOK_.Init(IDOK);
-	textHostName_.Init(IDC_EDIT1);
+	textHostName_.Init(IDC_COMBO1);
+	textPSW_.Init(IDC_EDIT2);
 
 	butOK_.onClick_ = [&]{
 
@@ -26,8 +27,15 @@ void FormConnect::OnInit()
 			return;
 		}
 
+		if (textPSW_.GetText() == tcc_(""))
+		{
+			PopMessage(tcc_("请输入密码!"));
+			textPSW_.SetFocus();
+			return;
+		}
+
 		FormLoad::RunAsync(tcc_("正在连接中..."), this, [=](FormLoad & form){
-			Sleep(2000);
+			df::ThreadSleep(3000);
 		});
 	};
 }

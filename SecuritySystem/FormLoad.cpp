@@ -15,6 +15,7 @@ FormLoad::~FormLoad()
 void FormLoad::OnInit()
 {
 	picI_ = 0;
+
 	if (!pic_.Load(IDB_PNG1))
 	{
 		PopMessage(tcc_("Í¼Æ¬¼ÓÔØÊ§°Ü!"));
@@ -40,18 +41,6 @@ void FormLoad::OnTimer(uint)
 	picI_++;
 	if (picI_ >= picCount_)
 		picI_ = 0;
+
 	OnPaint();
-}
-
-void FormLoad::RunAsync(CC msg, WinHandle win, std::function<void(FormLoad &)> form)
-{
-	df::IntoPtr<FormLoad> loadPtr = NewWindow<FormLoad>();
-	loadPtr->contentText_ = msg;
-	df::AsyncStart([=]{
-
-		form(*loadPtr.Get());
-
-		loadPtr->onClose_();
-	});
-	loadPtr->OpenModal(win.handle_);
 }
