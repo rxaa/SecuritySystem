@@ -13,6 +13,7 @@ public:
 	//监听端口
 	USHORT listen_port;
 
+	//服务端认证密码,默认rxaa+_)(*&^%$#@!
 	SS access_psw;
 
 	META_DATA_INIT;

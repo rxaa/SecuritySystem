@@ -34,8 +34,24 @@ void FormConnect::OnInit()
 			return;
 		}
 
-		FormLoad::RunAsync(tcc_("正在连接中..."), this, [=](FormLoad & form){
-			df::ThreadSleep(3000);
+		df::IntoPtr<FormConnect> formPtr(this);
+		FormLoad::RunAsync(tcc_("正在连接中..."), this, [=](FormLoad & formLoading){
+			try
+			{
+				auto con = df::IocpSocket::Connect<MainConnecter, false>(textHostName_.GetText(), G::main.listen_port);
+				SS psw = formPtr->textPSW_.GetText();
+				UCHAR key[32];
+				Sha2PasswordBuf(psw, key);
+				con->SessionCrypt_.InitByteKey(key);
+				con->StartRecvIo();
+			}
+			catch (df::WinException & ex)
+			{
+				formLoading.Close();
+				formPtr->Message(cct_("连接失败!\r\n") + ex.message_);
+			}
+		
+
 		});
 	};
 }

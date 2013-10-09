@@ -19,8 +19,14 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 
 	df::Init(hInstance);
 
-
 	G::ReadMainIni();
+
+	MainConnecter::InitVerifyKey();
+
+	UCHAR sss[16] = {'1','2','3'};
+	UCHAR sss2[16] = { '1', '2', '3' };
+	MainConnecter::VerifyCrypt_.Encrypt(sss, sss, 16);
+	MainConnecter::VerifyCrypt_.Encrypt(sss2, sss2, 16);
 
 	G::MainListen();
 
