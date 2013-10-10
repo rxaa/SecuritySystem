@@ -1,12 +1,12 @@
 #pragma once
 
 
-class MainForm :
+class FormMain :
 	public Window
 {
 public:
-	MainForm(void);
-	~MainForm(void);
+	FormMain(void);
+	~FormMain(void);
 
 	Button buttonConnect_;
 	Button buttonDisconnect_;

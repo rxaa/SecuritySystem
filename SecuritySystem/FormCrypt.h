@@ -1,12 +1,12 @@
 #pragma once
 
 
-class CryptForm :
+class FormCrypt :
 	public Window
 {
 public:
-	CryptForm(void);
-	~CryptForm(void);
+	FormCrypt(void);
+	~FormCrypt(void);
 
 	ImageList imageList_;
 	ListView viewFile_;

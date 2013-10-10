@@ -1,18 +1,18 @@
 #include "StdAfx.h"
-#include "AboutForm.h"
+#include "FormAbout.h"
 
 
-AboutForm::AboutForm(void)
+FormAbout::FormAbout(void)
 {
 	resourceID_ = IDD_ABOUTBOX;
 }
 
 
-AboutForm::~AboutForm(void)
+FormAbout::~FormAbout(void)
 {
 }
 
-void AboutForm::OnInit()
+void FormAbout::OnInit()
 {
 	butOK_.Init(IDOK);
 	butOK_.onClick_ = [&]{

@@ -25,6 +25,9 @@
     <Filter Include="df\cryptology">
       <UniqueIdentifier>{013b46fd-9833-4184-82da-e3ee0b86441a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Form">
+      <UniqueIdentifier>{c6b5f822-dfb9-4ef0-b5d2-cb7a016b60e0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="image\back.bmp">
@@ -176,15 +179,6 @@
     <ClInclude Include="..\..\df\Utest.h">
       <Filter>df</Filter>
     </ClInclude>
-    <ClInclude Include="MainForm.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="AboutForm.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="CryptForm.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\df\StringBuf.h">
       <Filter>df</Filter>
     </ClInclude>
@@ -234,10 +228,19 @@
       <Filter>df\cryptology</Filter>
     </ClInclude>
     <ClInclude Include="FormConnect.h">
-      <Filter>头文件</Filter>
+      <Filter>Form</Filter>
     </ClInclude>
     <ClInclude Include="FormLoad.h">
-      <Filter>头文件</Filter>
+      <Filter>Form</Filter>
+    </ClInclude>
+    <ClInclude Include="FormMain.h">
+      <Filter>Form</Filter>
+    </ClInclude>
+    <ClInclude Include="FormCrypt.h">
+      <Filter>Form</Filter>
+    </ClInclude>
+    <ClInclude Include="FormAbout.h">
+      <Filter>Form</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -249,15 +252,6 @@
     </ClCompile>
     <ClCompile Include="..\..\window\Window.cpp">
       <Filter>Window</Filter>
-    </ClCompile>
-    <ClCompile Include="MainForm.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="AboutForm.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="CryptForm.cpp">
-      <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="..\..\df\df.cpp">
       <Filter>df</Filter>
@@ -278,10 +272,19 @@
       <Filter>df\cryptology</Filter>
     </ClCompile>
     <ClCompile Include="FormConnect.cpp">
-      <Filter>源文件</Filter>
+      <Filter>Form</Filter>
     </ClCompile>
     <ClCompile Include="FormLoad.cpp">
-      <Filter>源文件</Filter>
+      <Filter>Form</Filter>
+    </ClCompile>
+    <ClCompile Include="FormMain.cpp">
+      <Filter>Form</Filter>
+    </ClCompile>
+    <ClCompile Include="FormCrypt.cpp">
+      <Filter>Form</Filter>
+    </ClCompile>
+    <ClCompile Include="FormAbout.cpp">
+      <Filter>Form</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

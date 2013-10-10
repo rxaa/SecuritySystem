@@ -37,7 +37,7 @@ using namespace sdf;
 #include "Resource.h"
 
 #include "G.h"
-#include "MainForm.h"
+#include "FormMain.h"
 
 
 #endif // stdafx_h__2013_8_3__18_15

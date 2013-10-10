@@ -5,7 +5,7 @@ compile_param =g++ -Wall -fexceptions -fexec-charset=GBK -finput-charset=GBK -O3
 #objÄ¿Â¼
 obj_menu=release/obj/
 #³ÌÐòÃû
-app_name=release/app.exe
+app_name=release/SecuritySystem.exe
 
 
 include com.makefile

@@ -1,4 +1,5 @@
 #pragma once
+#include "FormLoad.h"
 
 class FormConnect :
 	public Window
@@ -12,5 +13,8 @@ public:
 	Control textPSW_;
 
 	void OnInit() override;
+
+	//连接指定主机
+	void ConnectHost(FormLoad & formLoading);
 };
 

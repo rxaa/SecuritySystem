@@ -5,7 +5,7 @@ compile_param=g++ -Wall -fexceptions -fexec-charset=GBK -finput-charset=GBK -g -
 obj_menu=debug/obj/
 
 #³ÌÐòÃû
-app_name=debug/app.exe
+app_name=debug/SecuritySystem.exe
 
 
 include com.makefile

@@ -1,11 +1,11 @@
 #pragma once
 
-class AboutForm :
+class FormAbout :
 	public Window
 {
 public:
-	AboutForm(void);
-	~AboutForm(void);
+	FormAbout(void);
+	~FormAbout(void);
 
 	Button butOK_;
 	

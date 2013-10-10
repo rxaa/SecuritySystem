@@ -23,11 +23,6 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 
 	MainConnecter::InitVerifyKey();
 
-	UCHAR sss[16] = {'1','2','3'};
-	UCHAR sss2[16] = { '1', '2', '3' };
-	MainConnecter::VerifyCrypt_.Encrypt(sss, sss, 16);
-	MainConnecter::VerifyCrypt_.Encrypt(sss2, sss2, 16);
-
 	G::MainListen();
 
 	if (G::main.hide_window)
@@ -37,7 +32,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 	{
 		Window::InitImage(IDB_BITMAP1);
 		//MainForm().Run();
-		NewWindow<MainForm>()->Run();
+		NewWindow<FormMain>()->Run();
 	}
 
 	return 1;

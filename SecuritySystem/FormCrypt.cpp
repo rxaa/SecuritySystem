@@ -1,22 +1,22 @@
 #include "StdAfx.h"
-#include "CryptForm.h"
+#include "FormCrypt.h"
 
 #include "../../df/cryptology/Crypt.h"
 
 
-CryptForm::CryptForm(void)
+FormCrypt::FormCrypt(void)
 {
 	resourceID_ = IDD_FILE_CRYP;
 	isCrypting_ = false;
 }
 
 
-CryptForm::~CryptForm(void)
+FormCrypt::~FormCrypt(void)
 {
 	G::WriteMainIni();
 }
 
-void CryptForm::OnInit()
+void FormCrypt::OnInit()
 {
 	txtInfo_.Init(IDC_EDIT4);
 
@@ -88,7 +88,7 @@ void CryptForm::OnInit()
 }
 
 
-void CryptForm::ViewDoubleClick(int i)
+void FormCrypt::ViewDoubleClick(int i)
 {
 	if (i < 0 || i >= dirList_.listDir_.Size())
 		return;
@@ -99,7 +99,7 @@ void CryptForm::ViewDoubleClick(int i)
 	ShowMenuContent(newMenu);
 }
 
-void CryptForm::ShowMenuContent(CC menu)
+void FormCrypt::ShowMenuContent(CC menu)
 {
 	G::main.file_crypt_init_menu = menu;
 	viewFile_.Clear();
@@ -131,7 +131,7 @@ void CryptForm::ShowMenuContent(CC menu)
 	}
 }
 
-void CryptForm::OnButtonBackClick()
+void FormCrypt::OnButtonBackClick()
 {
 	SS menu = diskList_.GetText();
 	int pos = menu.Find(tt_('\\'), menu.Length() - 2, false);
@@ -144,7 +144,7 @@ void CryptForm::OnButtonBackClick()
 	ShowMenuContent(menu);
 }
 
-void CryptForm::OnEncryptClick()
+void FormCrypt::OnEncryptClick()
 {
 	int index = viewFile_.GetSelectIndex();
 	if (index < 0 || index < dirList_.listDir_.Size())
@@ -171,7 +171,7 @@ void CryptForm::OnEncryptClick()
 	SS selectFile = viewFile_.GetText(index, 0);
 
 
-	df::IntoPtr<CryptForm> winPtr(this);
+	df::IntoPtr<FormCrypt> winPtr(this);
 
 	buttonEncrypt_.Enable(FALSE);
 	buttonDecrypt_.Enable(FALSE);
@@ -228,7 +228,7 @@ void CryptForm::OnEncryptClick()
 
 }
 
-void CryptForm::OnDecryptClick()
+void FormCrypt::OnDecryptClick()
 {
 	int index = viewFile_.GetSelectIndex();
 	if (index < 0 || index < dirList_.listDir_.Size())
@@ -255,7 +255,7 @@ void CryptForm::OnDecryptClick()
 	SS selectFile = viewFile_.GetText(index, 0);
 
 
-	df::IntoPtr<CryptForm> winPtr(this);
+	df::IntoPtr<FormCrypt> winPtr(this);
 
 	buttonEncrypt_.Enable(FALSE);
 	buttonDecrypt_.Enable(FALSE);
@@ -295,7 +295,7 @@ void CryptForm::OnDecryptClick()
 	});
 }
 
-void CryptForm::ViewClick(int i)
+void FormCrypt::ViewClick(int i)
 {
 	if (i < 0 || i < dirList_.listDir_.Size() || isCrypting_)
 	{

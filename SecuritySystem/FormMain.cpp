@@ -1,20 +1,20 @@
 #include "StdAfx.h"
-#include "MainForm.h"
-#include "AboutForm.h"
-#include "CryptForm.h"
+#include "FormMain.h"
+#include "FormAbout.h"
+#include "FormCrypt.h"
 #include "FormConnect.h"
 
-MainForm::MainForm(void)
+FormMain::FormMain(void)
 {
 	resourceID_ = IDD_MAIN;
 }
 
 
-MainForm::~MainForm(void)
+FormMain::~FormMain(void)
 {
 }
 
-void MainForm::OnInit()
+void FormMain::OnInit()
 {
 	SetIcon(IDI_ICON1);
 
@@ -66,13 +66,13 @@ void MainForm::OnInit()
 		Close(true);
 	});
 	AddEvent(IDM_ABOUT, [&]{
-		AboutForm().OpenModal(this);
+		FormAbout().OpenModal(this);
 	});
 	AddEvent(ID_32772, [&]{
 		Show();
 	});
 
 	AddEvent(ID_32771, [&]{
-		NewWindow<CryptForm>()->Open();
+		NewWindow<FormCrypt>()->Open();
 	});
 }
