@@ -9,3 +9,9 @@
 
 df::Config G::mainIni_(tt_("SecuritySystemMain.ini"));
 MainModel G::main{ tcc_(""), false, defaultPort_ };
+
+List < G::ConnectPtr> G::serverList_;
+df::Lock G::listLock_;
+
+
+

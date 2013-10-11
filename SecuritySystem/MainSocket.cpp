@@ -2,29 +2,8 @@
 #include "MainSocket.h"
 #include "../../df/cryptology/sha2.h"
 
-MainConnecter::DirectProcFunc MainConnecter::FuncList[Direct::_DirectEnd];
+
 df::CryptAlg <df::CryptMode::AES_CBC> MainConnecter::VerifyCrypt_;
-
-
-
-template<unsigned DirectI>
-struct DirectProc
-{
-	static_assert(DirectI < Direct::_DirectEnd, "Index out of range");
-
-	static void Func(MainConnecter *, char *, uint)
-	{
-		static_assert(DirectI >= Direct::_DirectEnd, "no implementation direct process function");
-	}
-};
-
-
-template<>
-void DirectProc<Direct::GetHost>::Func(MainConnecter *, char * msg, uint size)
-{
-	COUT(msg);
-};
-
 
 
 void MainConnecter::OnConnect()
@@ -33,6 +12,7 @@ void MainConnecter::OnConnect()
 	uint16_t sessionKey[8];
 
 	sessionKey[0] = verifyPsw_;
+	//对每一客户端生成14字节随机会话密钥
 	for (int i = 1; i < 8; i++)
 	{
 		sessionKey[i] = (uint16_t)rand();
@@ -46,6 +26,32 @@ void MainConnecter::OnConnect()
 
 	hasSessionKey_ = true;
 }
+
+void MainConnecter::OnClosed()
+{
+	if (isClient_)
+	{
+		LOCKED(G::listLock_);
+		//查找客户端位置
+		for (int i = 0; i < G::serverList_.Size(); i++)
+		{
+			if (G::serverList_[i].Get() == this)
+			{
+				//移除
+				G::serverList_.Del(i);
+				if (FormMain::ptr_)
+				{
+					FormMain::ptr_->viewHost_.Delete(i);
+					FormMain::ptr_->hostCount_.SetText(tcc_("已连接主机数:") + G::serverList_.Count());
+				}
+					
+				return;
+			}
+		}		
+	}
+}
+
+
 
 void MainConnecter::OnRecv(char * msg, uint length)
 {
@@ -96,7 +102,7 @@ void MainConnecter::OnRecv(char * msg, uint length)
 		//调用指令函数
 		length -= footZero;
 		if (directCode < Direct::_DirectEnd)
-			FuncList[directCode](this, msg, length);
+			DirectFunc::FuncList[directCode](this, msg, length);
 
 
 		return;
@@ -121,25 +127,15 @@ void MainConnecter::OnRecv(char * msg, uint length)
 		return;
 	}
 
-
+	//连接成功
 	SessionCrypt_.InitByteKey((unsigned char*)msg);
 	hasSessionKey_ = true;
 
-	//Send(Direct::GetHost, 0, 13);
+	//获取主机信息
+	Send(Direct::GetHost, 0, 0);
 
 }
 
-
-template<unsigned I>
-struct InitProc
-{
-	inline static void Init()
-	{
-		MainConnecter::FuncList[I] = DirectProc<I>::Func;
-
-		InitProc<I + 1>::Init();
-	}
-};
 
 void Sha2Password(SS & psw)
 {
@@ -158,20 +154,7 @@ void Sha2PasswordBuf(SS & psw, unsigned char sha2Res[32])
 	resPtr[3] ^= resPtr[7];
 }
 
-template<>
-struct InitProc< Direct::_DirectEnd>
-{
-	static void Init()
-	{
-	}
-};
 
-
-
-void MainConnecter::InitFunc()
-{
-	InitProc<0>::Init();
-}
 
 void MainConnecter::InitVerifyKey()
 {

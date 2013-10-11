@@ -36,7 +36,10 @@ using namespace sdf;
 
 #include "Resource.h"
 
+#include "DirectFunc.h"
 #include "G.h"
+
+
 #include "FormMain.h"
 
 

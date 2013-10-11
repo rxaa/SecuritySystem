@@ -3,15 +3,19 @@
 #include "FormAbout.h"
 #include "FormCrypt.h"
 #include "FormConnect.h"
+#include "FormSet.h"
+#include "FormRemoteFile.h"
 
 FormMain::FormMain(void)
 {
 	resourceID_ = IDD_MAIN;
+	ptr_ = this;
 }
 
 
 FormMain::~FormMain(void)
 {
+	ptr_ = nullptr;
 }
 
 void FormMain::OnInit()
@@ -25,9 +29,20 @@ void FormMain::OnInit()
 	};
 
 	buttionFile_.Init(IDC_BUTTON1);
+	buttionFile_.onClick_ = [&](){
+		RemoteFile();
+	};
+
 	buttonDisconnect_.Init(IDC_BUTTON2);
 	buttonCmd_.Init(IDC_BUTTON3);
+	buttonCmd_.onClick_ = [&](){
+		CommanLine();
+	};
+
 	buttonProcManag_.Init(IDC_BUTTON4);
+	buttonProcManag_.onClick_ = [&](){
+		RemoteProcess();
+	};
 
 	buttonDisconnect_.onDraw_ = Button::OrangeButton;
 	buttonDisconnect_.onClick_ = [&](){
@@ -75,4 +90,50 @@ void FormMain::OnInit()
 	AddEvent(ID_32771, [&]{
 		NewWindow<FormCrypt>()->Open();
 	});
+
+	AddEvent(ID_32778, [&]{
+		NewWindow<FormSet>()->OpenModal(this);
+	});
+	AddEvent(ID_32775, [&]{
+		RemoteFile();
+	});
+
+	AddEvent(ID_32780, [&]{
+		NewWindow<FormConnect>()->OpenModal(this);
+	});
+	
 }
+
+void FormMain::RemoteFile()
+{
+	int i = viewHost_.GetSelectIndex();
+	if (i < 0)
+	{
+		PopHostErrMsg();
+		return;
+	}
+
+	NewWindow<FormRemoteFile>()->Open();
+}
+
+void FormMain::CommanLine()
+{
+	int i = viewHost_.GetSelectIndex();
+	if (i < 0)
+	{
+		PopHostErrMsg();
+		return;
+	}
+}
+
+void FormMain::RemoteProcess()
+{
+	int i = viewHost_.GetSelectIndex();
+	if (i < 0)
+	{
+		PopHostErrMsg();
+		return;
+	}
+}
+
+FormMain * FormMain::ptr_;

@@ -8,6 +8,8 @@ public:
 	FormMain(void);
 	~FormMain(void);
 
+	static FormMain * ptr_;
+
 	Button buttonConnect_;
 	Button buttonDisconnect_;
 	Button buttionFile_;
@@ -20,5 +22,14 @@ public:
 	Tray tary_;
 
 	void OnInit() override;
+
+	void RemoteFile();
+	void CommanLine();
+	void RemoteProcess();
+
+	void PopHostErrMsg()
+	{
+		PopMessage(tcc_("没有选择主机!"),500);
+	}
 };
 

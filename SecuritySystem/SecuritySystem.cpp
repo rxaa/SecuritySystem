@@ -10,7 +10,6 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 	LPTSTR,
 	int)
 {
-
 	if (::FindWindow(0, t_t("Security System")) != 0)
 	{
 		df::msg(t_t("程序正在运行!"));
@@ -27,6 +26,10 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 
 	if (G::main.hide_window)
 	{
+		for (;;)
+		{
+			df::ThreadSleep(60 * 60 * 1000);
+		}
 	}
 	else
 	{

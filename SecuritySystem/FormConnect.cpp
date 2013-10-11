@@ -17,6 +17,7 @@ void FormConnect::OnInit()
 	textHostName_.Init(IDC_COMBO1);
 	textPSW_.Init(IDC_EDIT2);
 
+
 	butOK_.onClick_ = [&]{
 
 		if (textHostName_.GetText() == tcc_(""))
@@ -51,12 +52,14 @@ void FormConnect::ConnectHost(FormLoad & formLoading)
 			con->Close();
 			return;
 		}
-		srand(GetTickCount());
+		::srand(GetTickCount());
 		SS psw = textPSW_.GetText();
 		UCHAR key[32];
 		Sha2PasswordBuf(psw, key);
 		con->SessionCrypt_.InitByteKey(key);
+		con->isClient_ = true;
 		con->StartRecvIo();
+		Close();
 	}
 	catch (df::WinException & ex)
 	{
@@ -65,7 +68,7 @@ void FormConnect::ConnectHost(FormLoad & formLoading)
 
 		formLoading.Close();
 
-		Message(cct_("连接失败!\r\n") + ex.message_);
+		MessageERR(cct_("连接失败!\r\n") + ex.message_);
 	}
 
 }

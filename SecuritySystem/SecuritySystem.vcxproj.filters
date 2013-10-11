@@ -242,6 +242,15 @@
     <ClInclude Include="FormAbout.h">
       <Filter>Form</Filter>
     </ClInclude>
+    <ClInclude Include="FormSet.h">
+      <Filter>Form</Filter>
+    </ClInclude>
+    <ClInclude Include="FormRemoteFile.h">
+      <Filter>Form</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectFunc.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -285,6 +294,15 @@
     </ClCompile>
     <ClCompile Include="FormAbout.cpp">
       <Filter>Form</Filter>
+    </ClCompile>
+    <ClCompile Include="FormSet.cpp">
+      <Filter>Form</Filter>
+    </ClCompile>
+    <ClCompile Include="FormRemoteFile.cpp">
+      <Filter>Form</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectFunc.cpp">
+      <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
