@@ -9,10 +9,12 @@ df::CryptAlg <df::CryptMode::AES_CBC> MainConnecter::VerifyCrypt_;
 void MainConnecter::OnConnect()
 {
 	::srand(GetTickCount());
+	
 	uint16_t sessionKey[8];
 
 	sessionKey[0] = verifyPsw_;
-	//对每一客户端生成14字节随机会话密钥
+
+	//对每个客户端的每个连接生成14字节随机会话密钥
 	for (int i = 1; i < 8; i++)
 	{
 		sessionKey[i] = (uint16_t)rand();
@@ -171,6 +173,7 @@ void MainConnecter::InitVerifyKey()
 bool MainConnecter::Send(uint16_t directive, const char *msg, uint len)
 {
 	MY_ASSERT(directive < Direct::_DirectEnd);
+	MY_ASSERT(hasSessionKey_);
 
 	if ((msg == nullptr && len > 0) || len > df::IocpOverlap::MAX_PACKAGE_SIZE)
 	{

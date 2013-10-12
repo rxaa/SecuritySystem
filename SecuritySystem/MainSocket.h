@@ -20,7 +20,7 @@ public:
 	//认证口令
 	static const uint16_t verifyWord_ = 65535;
 
-	//首次连接OnConnect()sessionKey[0]固定字符
+	//会话密钥前2个字节
 	static const uint16_t verifyPsw_ = 12345;
 
 	//包头长度:4字节包长度,1字节末尾补0,2字节指令代号......4字节认证口令

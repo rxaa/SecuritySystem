@@ -2,6 +2,8 @@
 #include "FormSet.h"
 
 
+const static CC regVal = tcc_("SecuritySystem");
+
 FormSet::FormSet()
 {
 	resourceID_ = IDD_SET;
@@ -24,12 +26,28 @@ void FormSet::OnInit()
 
 	TextPort_.Init(IDC_EDIT1);
 	TextPSW_.Init(IDC_EDIT2);
-	CheckHide_.Init(IDC_CHECK1);
+	choice_.AddItem(IDC_CHECK1);
+	choice_.AddItem(IDC_CHECK2);
+	choice_.onClick_ = [&](int i){
+		if (i == 1)
+			OnAutoStartChoice();
+	};
 
 
 	TextPort_.SetText(tcc_("") + G::main.listen_port);
 
-	CheckHide_.SetCheck(G::main.hide_window);
+	choice_[0].SetCheck(G::main.hide_window);
+
+	
+	reg_.EachKeyValue([&](df::RegKeyValue & key){
+
+		if (key.type == df::Reg::KeyString && key.key == regVal)
+		{
+			choice_[1].SetCheck(TRUE);
+			return false;
+		}
+		return true;
+	});
 
 }
 
@@ -45,7 +63,20 @@ void FormSet::OnButtonOkClick()
 
 	df::StringToInteger(port, G::main.listen_port);
 
-	G::main.hide_window = CheckHide_.GetCheck();
+	G::main.hide_window = choice_[0].GetCheck();
 	G::WriteMainIni();
 	Close();
+}
+
+void FormSet::OnAutoStartChoice()
+{
+	if (choice_[1].GetCheck())
+	{
+		if (!reg_.SetValue(regVal, df::GetExeMenu()))
+			PopMessage(tcc_("¿ª»ú×ÔÆôÊ§°Ü!"));
+	}
+	else
+	{
+		reg_.DeleteValue(regVal);
+	}
 }

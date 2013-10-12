@@ -251,6 +251,12 @@
     <ClInclude Include="DirectFunc.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\window\Reg.h">
+      <Filter>Window</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\df\SyncStackLockFree.h">
+      <Filter>df</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

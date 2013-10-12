@@ -118,6 +118,7 @@
     <ClInclude Include="..\..\df\StdAfx.h" />
     <ClInclude Include="..\..\df\StringBuf.h" />
     <ClInclude Include="..\..\df\SyncQueue.h" />
+    <ClInclude Include="..\..\df\SyncStackLockFree.h" />
     <ClInclude Include="..\..\df\targetver.h" />
     <ClInclude Include="..\..\df\Thread.h" />
     <ClInclude Include="..\..\df\TickCLock.h" />
@@ -133,6 +134,7 @@
     <ClInclude Include="..\..\window\ImageList.h" />
     <ClInclude Include="..\..\window\ListBox.h" />
     <ClInclude Include="..\..\window\ListView.h" />
+    <ClInclude Include="..\..\window\Reg.h" />
     <ClInclude Include="..\..\window\StdAfx.h" />
     <ClInclude Include="..\..\window\TabControl.h" />
     <ClInclude Include="..\..\window\TextBox.h" />
