@@ -9,6 +9,10 @@
       <Configuration>Release</Configuration>
       <Platform>Win32</Platform>
     </ProjectConfiguration>
+    <ProjectConfiguration Include="Test|Win32">
+      <Configuration>Test</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{DBAE903C-5231-4EA3-B4C8-90248E0A6ABE}</ProjectGuid>
@@ -17,6 +21,12 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>NotSet</CharacterSet>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Test|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>NotSet</CharacterSet>
@@ -35,11 +45,17 @@
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Test|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Test|Win32'">
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -51,6 +67,18 @@
       <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Test|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level4</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_TEST;WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -83,11 +111,11 @@
   <ItemGroup>
     <ClInclude Include="..\..\df\atom.h" />
     <ClInclude Include="..\..\df\BaseChar.h" />
-    <ClInclude Include="..\..\df\BaseSocket.h" />
     <ClInclude Include="..\..\df\BaseString.h" />
     <ClInclude Include="..\..\df\BaseStringOperator.h" />
     <ClInclude Include="..\..\df\BaseStringOperator2.h" />
     <ClInclude Include="..\..\df\CharConvert.h" />
+    <ClInclude Include="..\..\df\cmd.h" />
     <ClInclude Include="..\..\df\Config.h" />
     <ClInclude Include="..\..\df\ConvertString.h" />
     <ClInclude Include="..\..\df\cryptology\aes.h" />
@@ -101,10 +129,7 @@
     <ClInclude Include="..\..\df\Dir.hpp" />
     <ClInclude Include="..\..\df\ErrLog.h" />
     <ClInclude Include="..\..\df\Event.h" />
-    <ClInclude Include="..\..\df\File.h" />
-    <ClInclude Include="..\..\df\File.hpp" />
     <ClInclude Include="..\..\df\FileBin.h" />
-    <ClInclude Include="..\..\df\IocpSocket.h" />
     <ClInclude Include="..\..\df\List.h" />
     <ClInclude Include="..\..\df\Lock.h" />
     <ClInclude Include="..\..\df\MallocAllocator.h" />
@@ -115,6 +140,8 @@
     <ClInclude Include="..\..\df\ScopeGuard.h" />
     <ClInclude Include="..\..\df\SEH.h" />
     <ClInclude Include="..\..\df\ShareP.h" />
+    <ClInclude Include="..\..\df\socket\BaseSocket.h" />
+    <ClInclude Include="..\..\df\socket\IocpSocket.h" />
     <ClInclude Include="..\..\df\StdAfx.h" />
     <ClInclude Include="..\..\df\StringBuf.h" />
     <ClInclude Include="..\..\df\SyncQueue.h" />
@@ -154,13 +181,14 @@
     <ClInclude Include="Resource.h" />
     <ClInclude Include="SecuritySystem.h" />
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="Test.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\df\cryptology\aes.cpp" />
     <ClCompile Include="..\..\df\cryptology\des.cpp" />
     <ClCompile Include="..\..\df\cryptology\sha2.cpp" />
     <ClCompile Include="..\..\df\df.cpp" />
-    <ClCompile Include="..\..\df\IocpSocket.cpp" />
+    <ClCompile Include="..\..\df\socket\IocpSocket.cpp" />
     <ClCompile Include="..\..\window\Window.cpp" />
     <ClCompile Include="DirectFunc.cpp" />
     <ClCompile Include="FormAbout.cpp" />
@@ -174,6 +202,7 @@
     <ClCompile Include="SecuritySystem.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Test|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
   </ItemGroup>

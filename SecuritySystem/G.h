@@ -6,13 +6,17 @@
 
 class G
 {
-private:
-	//配置文件
-	static df::Config mainIni_;
+public:
 	//默认监听端口
 	static const int defaultPort_ = 19836;
 
-public:
+	//配置文件
+	static const SS & IniFile()
+	{
+		static SS name = df::GetProgressDir() + tcc_("SecuritySystemMain.ini");
+		return name;
+	}
+
 	//连接对象智能指针
 	typedef df::IntoPtr<MainConnecter> ConnectPtr;
 
@@ -27,7 +31,7 @@ public:
 	
 
 	//启动监听端口
-	static SOCKET MainListen()
+	inline static SOCKET MainListen()
 	{
 		DirectFunc::InitFunc();
 		return df::IocpSocket::Listen<MainConnecter>(main.listen_port);
@@ -35,18 +39,18 @@ public:
 
 
 	//读配置
-	static bool ReadMainIni()
+	inline static bool ReadMainIni()
 	{
-		bool res = mainIni_.ReadToObject(main);
+		bool res = df::Config::Read(IniFile(), main);
 		if (G::main.listen_port == 0)
 			G::main.listen_port = defaultPort_;
 		return res;
 	}
 
 	//写配置
-	static bool WriteMainIni()
+	inline static bool WriteMainIni()
 	{
-		return mainIni_.WriteFromObject(main);
+		return df::Config::Write(IniFile(), main);
 	}
 };
 

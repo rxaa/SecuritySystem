@@ -28,6 +28,12 @@
     <Filter Include="Form">
       <UniqueIdentifier>{c6b5f822-dfb9-4ef0-b5d2-cb7a016b60e0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="df\socket">
+      <UniqueIdentifier>{e14de9a9-8de4-4980-91a2-1d478eaf9d25}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="test">
+      <UniqueIdentifier>{18acc2f8-331f-4851-99ad-f3258083ad29}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="image\back.bmp">
@@ -131,12 +137,6 @@
     <ClInclude Include="..\..\df\Event.h">
       <Filter>df</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\df\File.h">
-      <Filter>df</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\df\File.hpp">
-      <Filter>df</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\df\List.h">
       <Filter>df</Filter>
     </ClInclude>
@@ -200,14 +200,8 @@
     <ClInclude Include="..\..\window\Font.h">
       <Filter>Window</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\df\IocpSocket.h">
-      <Filter>df</Filter>
-    </ClInclude>
     <ClInclude Include="MainSocket.h">
       <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\df\BaseSocket.h">
-      <Filter>df</Filter>
     </ClInclude>
     <ClInclude Include="..\..\df\MemPool.hpp">
       <Filter>df</Filter>
@@ -257,6 +251,18 @@
     <ClInclude Include="..\..\df\SyncStackLockFree.h">
       <Filter>df</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\df\socket\BaseSocket.h">
+      <Filter>df\socket</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\df\socket\IocpSocket.h">
+      <Filter>df\socket</Filter>
+    </ClInclude>
+    <ClInclude Include="Test.h">
+      <Filter>test</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\df\cmd.h">
+      <Filter>df</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -269,9 +275,6 @@
       <Filter>Window</Filter>
     </ClCompile>
     <ClCompile Include="..\..\df\df.cpp">
-      <Filter>df</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\df\IocpSocket.cpp">
       <Filter>df</Filter>
     </ClCompile>
     <ClCompile Include="MainSocket.cpp">
@@ -309,6 +312,9 @@
     </ClCompile>
     <ClCompile Include="DirectFunc.cpp">
       <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\df\socket\IocpSocket.cpp">
+      <Filter>df\socket</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -1,5 +1,5 @@
 #±àÒë²ÎÊı
-compile_param =g++ -Wall -fexceptions -fexec-charset=GBK -finput-charset=GBK -O3  -march=pentium4 -std=c++11 -DWIN32
+compile_param =g++ -Wall -fexceptions -fexec-charset=GBK -finput-charset=GBK -O2  -march=pentium4 -std=c++11 -DWIN32
 
 
 #objÄ¿Â¼

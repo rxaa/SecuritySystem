@@ -27,6 +27,11 @@ public:
 	void CommanLine();
 	void RemoteProcess();
 
+	void UpdateHostCount()
+	{
+		hostCount_.SetText(tcc_("已连接主机数:") + G::serverList_.Count());
+	}
+
 	void PopHostErrMsg()
 	{
 		PopMessage(tcc_("没有选择主机!"),500);

@@ -45,7 +45,7 @@ void DirectProc<Direct::ResponseHost>::Func(MainConnecter * con, char * msg, uin
 		if (size < 1)
 			size = 1;
 		FormMain::ptr_->viewHost_.AddRow(tcc_("") + con->GetSocket(), con->GetRemoteIpStr(), CC(msg, size - 1));
-		FormMain::ptr_->hostCount_.SetText(tcc_("已连接主机数:") + G::serverList_.Count());
+		FormMain::ptr_->UpdateHostCount();
 	}
 
 }

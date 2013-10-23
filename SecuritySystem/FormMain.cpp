@@ -136,4 +136,4 @@ void FormMain::RemoteProcess()
 	}
 }
 
-FormMain * FormMain::ptr_;
+FormMain * FormMain::ptr_ = nullptr;

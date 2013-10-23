@@ -44,7 +44,7 @@ void MainConnecter::OnClosed()
 				if (FormMain::ptr_)
 				{
 					FormMain::ptr_->viewHost_.Delete(i);
-					FormMain::ptr_->hostCount_.SetText(tcc_("已连接主机数:") + G::serverList_.Count());
+					FormMain::ptr_->UpdateHostCount();
 				}
 					
 				return;
@@ -135,7 +135,6 @@ void MainConnecter::OnRecv(char * msg, uint length)
 
 	//获取主机信息
 	Send(Direct::GetHost, 0, 0);
-
 }
 
 

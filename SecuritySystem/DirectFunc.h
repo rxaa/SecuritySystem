@@ -3,14 +3,14 @@
 //À˘”–÷∏¡Ó
 enum Direct
 {
-	GetHost
-	, ResponseHost
-	//,Ping
-	//,ResponsePing
+	GetHost,
+	ResponseHost,
+	//Ping,
+	//ResponsePing,
 
 
 
-	, _DirectEnd
+	_DirectEnd,
 };
 
 class MainConnecter;
