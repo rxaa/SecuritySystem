@@ -46,7 +46,7 @@ public:
 	bool Send(uint16_t directive, const char *msg, uint len);
 	bool Send(uint16_t directive, const CC & str)
 	{
-		return Send(directive, str.char_, (str.length_ + 1) * sizeof(TCHAR));
+		return Send(directive, (char*)str.char_, (str.length_ + 1) * sizeof(TCHAR));
 	}
 };
 

@@ -25,7 +25,7 @@ void DirectProc<Direct::GetHost>::Func(MainConnecter * con, char *, uint)
 	if (nRetCode != 0)
 	{
 		BREAK_POINT_MSG("gethostname failed");
-		ERR("gethostname failed");
+		ERR(tcc_("gethostname failed"));
 		return;
 	}
 

@@ -4,7 +4,6 @@
 #include "stdafx.h"
 #include "SecuritySystem.h"
 
-#include "../../df/cmd.h"
 
 int APIENTRY _tWinMain(HINSTANCE hInstance,
 	HINSTANCE,
@@ -25,11 +24,6 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 
 	G::MainListen();
 
-	df::cmd cm;
-
-	COUT(cm.Exec(tcc_("dir c:\\ \r\n")));
-	COUT(cm.Exec(tcc_("dir d:\\  \r\n")));
-	COUT(cm.Exec(tcc_("\r\n \r\n")));
 
 #ifdef _TEST
 #	include "Test.h"
