@@ -263,6 +263,9 @@
     <ClInclude Include="..\..\df\cmd.h">
       <Filter>df</Filter>
     </ClInclude>
+    <ClInclude Include="FormCMD.h">
+      <Filter>Form</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -315,6 +318,9 @@
     </ClCompile>
     <ClCompile Include="..\..\df\socket\IocpSocket.cpp">
       <Filter>df\socket</Filter>
+    </ClCompile>
+    <ClCompile Include="FormCMD.cpp">
+      <Filter>Form</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

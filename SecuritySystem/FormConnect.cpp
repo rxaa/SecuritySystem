@@ -18,6 +18,7 @@ void FormConnect::OnInit()
 	textPSW_.Init(IDC_EDIT2);
 
 
+
 	butOK_.onClick_ = [&]{
 
 		if (textHostName_.GetText() == tcc_(""))
