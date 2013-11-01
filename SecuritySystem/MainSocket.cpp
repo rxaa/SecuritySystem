@@ -1,4 +1,4 @@
-#include "stdafx.h"
+ï»¿#include "stdafx.h"
 #include "MainSocket.h"
 #include "../../df/cryptology/sha2.h"
 
@@ -14,7 +14,7 @@ void MainConnecter::OnConnect()
 
 	sessionKey[0] = verifyPsw_;
 
-	//¶ÔÃ¿¸ö¿Í»§¶ËµÄÃ¿¸öÁ¬½ÓÉú³É14×Ö½ÚËæ»ú»á»°ÃÜÔ¿
+	//å¯¹æ¯ä¸ªå®¢æˆ·ç«¯çš„æ¯ä¸ªè¿æ¥ç”Ÿæˆ14å­—èŠ‚éšæœºä¼šè¯å¯†é’¥
 	for (int i = 1; i < 8; i++)
 	{
 		sessionKey[i] = (uint16_t)rand();
@@ -34,12 +34,12 @@ void MainConnecter::OnClosed()
 	if (isClient_)
 	{
 		LOCKED(G::listLock_);
-		//²éÕÒ¿Í»§¶ËÎ»ÖÃ
+		//æŸ¥æ‰¾å®¢æˆ·ç«¯ä½ç½®
 		for (int i = 0; i < G::serverList_.Size(); i++)
 		{
 			if (G::serverList_[i].Get() == this)
 			{
-				//ÒÆ³ı
+				//ç§»é™¤
 				G::serverList_.Del(i);
 				if (FormMain::ptr_)
 				{
@@ -57,51 +57,51 @@ void MainConnecter::OnClosed()
 
 void MainConnecter::OnRecv(char * msg, uint length)
 {
-	//ºóĞø»á»°
+	//åç»­ä¼šè¯
 	if (hasSessionKey_)
 	{
-		if (length < 16)//°ü³¤¶È¹ıĞ¡,·Ç·¨Á¬½Ó
+		if (length < 16)//åŒ…é•¿åº¦è¿‡å°,éæ³•è¿æ¥
 		{
-			df::WriteLog(tcc_("°ü³¤¶È¹ıĞ¡,·Ç·¨Á¬½Ó:") + GetRemoteIpStr());
+			df::WriteLog(tcc_("åŒ…é•¿åº¦è¿‡å°,éæ³•è¿æ¥:") + GetRemoteIpStr());
 			Close();
 			return;
 		}
 
-		//½âÃÜ
+		//è§£å¯†
 		SessionCrypt_.Decrypt(msg, msg, length);
 
-		//Ä©Î²²¹0Êı
+		//æœ«å°¾è¡¥0æ•°
 		uint8_t footZero = (uint8_t)msg[0];
 		msg++;
 		length--;
 
-		if (footZero >= length) // °ü³¤¶È¹ıĞ¡, ·Ç·¨Á¬½Ó
+		if (footZero >= length) // åŒ…é•¿åº¦è¿‡å°, éæ³•è¿æ¥
 		{
-			df::WriteLog(tcc_("°ü³¤Ğ¡ÓÚ²¹0,·Ç·¨Á¬½Ó:") + GetRemoteIpStr());
+			df::WriteLog(tcc_("åŒ…é•¿å°äºè¡¥0,éæ³•è¿æ¥:") + GetRemoteIpStr());
 			Close();
 			return;
 		}
 
-		//ÈÏÖ¤¿ÚÁî
+		//è®¤è¯å£ä»¤
 		length -= 2;
 		uint16_t word1 = *(uint16_t*)(msg + length);
 		length -= 2;
 		uint16_t word2 = *(uint16_t*)(msg + length);
 
-		if ((word1 ^ word2) != verifyWord_)//ÈÏÖ¤Ê§°Ü,·Ç·¨Á¬½Ó
+		if ((word1 ^ word2) != verifyWord_)//è®¤è¯å¤±è´¥,éæ³•è¿æ¥
 		{
-			df::WriteLog(tcc_("ÈÏÖ¤Ê§°Ü,·Ç·¨Á¬½Ó:") + GetRemoteIpStr());
+			df::WriteLog(tcc_("è®¤è¯å¤±è´¥,éæ³•è¿æ¥:") + GetRemoteIpStr());
 			Close();
 			return;
 		}
 
 
-		//Ö¸Áî´úºÅ
+		//æŒ‡ä»¤ä»£å·
 		uint16_t directCode = *(uint16_t*)msg;
 		msg += 2;
 		length -= 2;
 
-		//µ÷ÓÃÖ¸Áîº¯Êı
+		//è°ƒç”¨æŒ‡ä»¤å‡½æ•°
 		length -= footZero;
 		if (directCode < Direct::_DirectEnd)
 			DirectFunc::FuncList[directCode](this, msg, length);
@@ -111,8 +111,8 @@ void MainConnecter::OnRecv(char * msg, uint length)
 	}
 
 
-	//Ê×´ÎÁ¬½Ó,»ñÈ¡»á»°ÃÜÔ¿
-	if (length != 16)//»á»°ÃÜÔ¿³¤¶È²»¶Ô,·Ç·¨Á¬½Ó
+	//é¦–æ¬¡è¿æ¥,è·å–ä¼šè¯å¯†é’¥
+	if (length != 16)//ä¼šè¯å¯†é’¥é•¿åº¦ä¸å¯¹,éæ³•è¿æ¥
 	{
 		Close();
 		return;
@@ -124,16 +124,16 @@ void MainConnecter::OnRecv(char * msg, uint length)
 	{
 		Close();
 		df::AsyncStart([]{
-			df::msg(tcc_("ÃÜÂë´íÎó!"));
+			df::msg(tcc_("å¯†ç é”™è¯¯!"));
 		});
 		return;
 	}
 
-	//Á¬½Ó³É¹¦
+	//è¿æ¥æˆåŠŸ
 	SessionCrypt_.InitByteKey((unsigned char*)msg);
 	hasSessionKey_ = true;
 
-	//»ñÈ¡Ö÷»úĞÅÏ¢
+	//è·å–ä¸»æœºä¿¡æ¯
 	Send(Direct::GetHost, 0, 0);
 }
 
@@ -176,7 +176,7 @@ bool MainConnecter::Send(uint16_t directive, const char *msg, uint len)
 
 	if ((msg == nullptr && len > 0) || len > df::IocpOverlap::MAX_PACKAGE_SIZE)
 	{
-		BREAK_POINT_MSG("IocpConnecter::Send·Ç·¨²ÎÊı");
+		BREAK_POINT_MSG("IocpConnecter::Sendéæ³•å‚æ•°");
 		return false;
 	}
 
@@ -185,7 +185,7 @@ bool MainConnecter::Send(uint16_t directive, const char *msg, uint len)
 		return false;
 	}
 
-	//¼ÆËãÄ©Î²²¹0Êı
+	//è®¡ç®—æœ«å°¾è¡¥0æ•°
 	uint8_t footZero = (len + packageHeaderSize_) % SessionCrypt_.KeySize;
 	if (footZero > 0)
 	{
@@ -193,33 +193,33 @@ bool MainConnecter::Send(uint16_t directive, const char *msg, uint len)
 	}
 
 
-	//ĞÂ³¤¶È=°üÄÚÈİ³¤+°üÍ·³¤+²¹0
+	//æ–°é•¿åº¦=åŒ…å†…å®¹é•¿+åŒ…å¤´é•¿+è¡¥0
 	uint newSize = len + headerSize_ + footZero;
 	auto io = df::IocpOverlap::New(newSize, this);
 
 	uint8_t * hp = (uint8_t *)io->buffer_;
 
-	//4×Ö½Ú°ü³¤¶È
+	//4å­—èŠ‚åŒ…é•¿åº¦
 	*(uint32_t*)hp = newSize - uncryptHeaderSize_;
 	hp += 4;
 
-	//1×Ö½Ú²¹0
+	//1å­—èŠ‚è¡¥0
 	*hp = footZero;
 	hp++;
 
-	//2×Ö½ÚÖ¸ÁîÂë
+	//2å­—èŠ‚æŒ‡ä»¤ç 
 	*(uint16_t*)hp = directive;
 	hp += 2;
 
-	//°üÄÚÈİ;
+	//åŒ…å†…å®¹;
 	memcpy(hp, msg, len);
 	hp += len;
 
-	//²¹0
+	//è¡¥0
 	memset(hp, 0, footZero);
 	hp += footZero;
 
-	//4×Ö½ÚÈÏÖ¤Ö¸Áî
+	//4å­—èŠ‚è®¤è¯æŒ‡ä»¤
 	uint16_t word1 = (uint16_t)rand();
 	uint16_t word2 = verifyWord_ ^ word1;
 	((uint16_t*)hp)[0] = word1;
@@ -227,7 +227,7 @@ bool MainConnecter::Send(uint16_t directive, const char *msg, uint len)
 
 	MY_ASSERT((newSize - uncryptHeaderSize_) % 16 == 0);
 
-	//´Ó²¹0´¦¿ªÊ¼¼ÓÃÜ
+	//ä»è¡¥0å¤„å¼€å§‹åŠ å¯†
 	SessionCrypt_.Encrypt(io->buffer_ + uncryptHeaderSize_, io->buffer_ + uncryptHeaderSize_, newSize - uncryptHeaderSize_);
 
 	return SendIocpOverlap(io, newSize);

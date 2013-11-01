@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "FormLoad.h"
 
 class FormConnect :
@@ -14,7 +14,7 @@ public:
 
 	void OnInit() override;
 
-	//Á¬½ÓÖ¸¶¨Ö÷»ú
+	//è¿žæŽ¥æŒ‡å®šä¸»æœº
 	void ConnectHost(FormLoad & formLoading);
 };
 

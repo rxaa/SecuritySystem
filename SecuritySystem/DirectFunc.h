@@ -1,6 +1,6 @@
-#pragma once
+ï»¿#pragma once
 
-//ËùÓĞÖ¸Áî
+//æ‰€æœ‰æŒ‡ä»¤
 enum Direct
 {
 	GetHost,
@@ -18,14 +18,14 @@ class MainConnecter;
 class DirectFunc
 {
 public:
-	//Ö¸Áîº¯Êı
+	//æŒ‡ä»¤å‡½æ•°
 	typedef void(*DirectProcFunc)(MainConnecter *, char *, uint);
 
-	//Ö¸Áîº¯Êı±í
+	//æŒ‡ä»¤å‡½æ•°è¡¨
 	static DirectProcFunc FuncList[Direct::_DirectEnd];
 
 
-	//³õÊ¼»¯Ö¸Áîº¯Êı
+	//åˆå§‹åŒ–æŒ‡ä»¤å‡½æ•°
 	static void InitFunc();
 };
 

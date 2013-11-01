@@ -1,36 +1,33 @@
-#pragma once
-#include "MainModel.h"
+ï»¿#pragma once
 #include "MainSocket.h"
-
+#include "MainModel.h"
 
 
 class G
 {
 public:
-	//Ä¬ÈÏ¼àÌı¶Ë¿Ú
-	static const int defaultPort_ = 19836;
 
-	//ÅäÖÃÎÄ¼ş
+	//é…ç½®æ–‡ä»¶
 	static const SS & IniFile()
 	{
 		static SS name = df::GetProgressDir() + tcc_("SecuritySystemMain.ini");
 		return name;
 	}
 
-	//Á¬½Ó¶ÔÏóÖÇÄÜÖ¸Õë
+	//è¿æ¥å¯¹è±¡æ™ºèƒ½æŒ‡é’ˆ
 	typedef df::IntoPtr<MainConnecter> ConnectPtr;
 
-	//ÒÑÁ¬½ÓµÄ·şÎñÆ÷ÁĞ±í
+	//å·²è¿æ¥çš„æœåŠ¡å™¨åˆ—è¡¨
 	static List < ConnectPtr> serverList_;
 
-	//serverList_Ëø
+	//serverList_é”
 	static df::Lock listLock_;
 
-	//ÅäÖÃÎÄ¼şÄ£ĞÍ
+	//é…ç½®æ–‡ä»¶æ¨¡å‹
 	static MainModel main;
 	
 
-	//Æô¶¯¼àÌı¶Ë¿Ú
+	//å¯åŠ¨ç›‘å¬ç«¯å£
 	inline static SOCKET MainListen()
 	{
 		DirectFunc::InitFunc();
@@ -38,16 +35,16 @@ public:
 	}
 
 
-	//¶ÁÅäÖÃ
+	//è¯»é…ç½®
 	inline static bool ReadMainIni()
 	{
 		bool res = df::Config::Read(IniFile(), main);
 		if (G::main.listen_port == 0)
-			G::main.listen_port = defaultPort_;
+			G::main.listen_port = MainModel::defaultPort_;
 		return res;
 	}
 
-	//Ğ´ÅäÖÃ
+	//å†™é…ç½®
 	inline static bool WriteMainIni()
 	{
 		return df::Config::Write(IniFile(), main);

@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 
 class FormMain :
@@ -29,12 +29,12 @@ public:
 
 	void UpdateHostCount()
 	{
-		hostCount_.SetText(tcc_("ÒÑÁ¬½ÓÖ÷»úÊý:") + G::serverList_.Count());
+		hostCount_.SetText(tcc_("å·²è¿žæŽ¥ä¸»æœºæ•°:") + G::serverList_.Count());
 	}
 
 	void PopHostErrMsg()
 	{
-		PopMessage(tcc_("Ã»ÓÐÑ¡ÔñÖ÷»ú!"),500);
+		PopMessage(tcc_("æ²¡æœ‰é€‰æ‹©ä¸»æœº!"),500);
 	}
 };
 

@@ -1,4 +1,4 @@
-#include "stdafx.h"
+ï»¿#include "stdafx.h"
 #include "FormConnect.h"
 
 FormConnect::FormConnect()
@@ -23,21 +23,21 @@ void FormConnect::OnInit()
 
 		if (textHostName_.GetText() == tcc_(""))
 		{
-			PopMessage(tcc_("ÇëÊäÈëÖ÷»úµØÖ·!"));
+			PopMessage(tcc_("è¯·è¾“å…¥ä¸»æœºåœ°å€!"));
 			textHostName_.SetFocus();
 			return;
 		}
 
 		if (textPSW_.GetText() == tcc_(""))
 		{
-			PopMessage(tcc_("ÇëÊäÈëÃÜÂë!"));
+			PopMessage(tcc_("è¯·è¾“å…¥å¯†ç !"));
 			textPSW_.SetFocus();
 			return;
 		}
 
 		df::IntoPtr<FormConnect> formPtr(this);
 
-		FormLoad::RunAsync(tcc_("ÕıÔÚÁ¬½ÓÖĞ..."), this, [=](FormLoad & formLoading){
+		FormLoad::RunAsync(tcc_("æ­£åœ¨è¿æ¥ä¸­..."), this, [=](FormLoad & formLoading){
 			formPtr->ConnectHost(formLoading);
 		});
 	};
@@ -69,7 +69,7 @@ void FormConnect::ConnectHost(FormLoad & formLoading)
 
 		formLoading.Close();
 
-		MessageERR(cct_("Á¬½ÓÊ§°Ü!\r\n") + ex.message_);
+		MessageERR(cct_("è¿æ¥å¤±è´¥!\r\n") + ex.message_);
 	}
 
 }

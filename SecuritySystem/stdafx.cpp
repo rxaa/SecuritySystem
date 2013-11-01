@@ -1,10 +1,10 @@
-// stdafx.cpp : Ö»°üÀ¨±ê×¼°üº¬ÎÄ¼þµÄÔ´ÎÄ¼þ
-// SecuritySystem.pch ½«×÷ÎªÔ¤±àÒëÍ·
-// stdafx.obj ½«°üº¬Ô¤±àÒëÀàÐÍÐÅÏ¢
+ï»¿// stdafx.cpp : åªåŒ…æ‹¬æ ‡å‡†åŒ…å«æ–‡ä»¶çš„æºæ–‡ä»¶
+// SecuritySystem.pch å°†ä½œä¸ºé¢„ç¼–è¯‘å¤´
+// stdafx.obj å°†åŒ…å«é¢„ç¼–è¯‘ç±»åž‹ä¿¡æ¯
 
 #include "stdafx.h"
 
-// TODO: ÔÚ STDAFX.H ÖÐ
-// ÒýÓÃÈÎºÎËùÐèµÄ¸½¼ÓÍ·ÎÄ¼þ£¬¶ø²»ÊÇÔÚ´ËÎÄ¼þÖÐÒýÓÃ
+// TODO: åœ¨ STDAFX.H ä¸­
+// å¼•ç”¨ä»»ä½•æ‰€éœ€çš„é™„åŠ å¤´æ–‡ä»¶ï¼Œè€Œä¸æ˜¯åœ¨æ­¤æ–‡ä»¶ä¸­å¼•ç”¨
 
 

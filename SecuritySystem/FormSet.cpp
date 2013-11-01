@@ -1,4 +1,4 @@
-#include "stdafx.h"
+ï»¿#include "stdafx.h"
 #include "FormSet.h"
 
 
@@ -57,7 +57,7 @@ void FormSet::OnButtonOkClick()
 	SS port = TextPort_.GetText();
 	if (port.Length() == 0)
 	{
-		PopMessage(tcc_("ÇëÊäÈë¶Ë¿ÚºÅ"),800);
+		PopMessage(tcc_("è¯·è¾“å…¥ç«¯å£å·"),800);
 		TextPort_.SetFocus();
 		return;
 	}
@@ -74,7 +74,7 @@ void FormSet::OnAutoStartChoice()
 	if (choice_[1].GetCheck())
 	{
 		if (!reg_.SetValue(regVal, df::GetExeMenu()))
-			PopMessage(tcc_("¿ª»ú×ÔÆôÊ§°Ü!"));
+			PopMessage(tcc_("å¼€æœºè‡ªå¯å¤±è´¥!"));
 	}
 	else
 	{

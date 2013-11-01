@@ -1,12 +1,12 @@
-#ifndef stdafx_h__2013_8_3__18_15
+ï»¿#ifndef stdafx_h__2013_8_3__18_15
 #define stdafx_h__2013_8_3__18_15
 
-// stdafx.h : ±ê×¼ÏµÍ³°üº¬ÎÄ¼şµÄ°üº¬ÎÄ¼ş£¬
-// »òÊÇ¾­³£Ê¹ÓÃµ«²»³£¸ü¸ÄµÄ
-// ÌØ¶¨ÓÚÏîÄ¿µÄ°üº¬ÎÄ¼ş
+// stdafx.h : æ ‡å‡†ç³»ç»ŸåŒ…å«æ–‡ä»¶çš„åŒ…å«æ–‡ä»¶ï¼Œ
+// æˆ–æ˜¯ç»å¸¸ä½¿ç”¨ä½†ä¸å¸¸æ›´æ”¹çš„
+// ç‰¹å®šäºé¡¹ç›®çš„åŒ…å«æ–‡ä»¶
 //
 
-///XPÊÓ¾õÑùÊ½
+///XPè§†è§‰æ ·å¼
 #ifdef _MSC_VER
 #if defined _M_IX86
 #pragma comment(linker,"/manifestdependency:\"type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='x86' publicKeyToken='6595b64144ccf1df' language='*'\"")
@@ -19,7 +19,7 @@
 #endif
 #endif
 
-// TODO: ÔÚ´Ë´¦ÒıÓÃ³ÌĞòĞèÒªµÄÆäËûÍ·ÎÄ¼ş
+// TODO: åœ¨æ­¤å¤„å¼•ç”¨ç¨‹åºéœ€è¦çš„å…¶ä»–å¤´æ–‡ä»¶
 #ifdef _DEBUG
 #define LAST_ERR_OUT 1
 #else
@@ -38,7 +38,6 @@ using namespace sdf;
 
 #include "DirectFunc.h"
 #include "G.h"
-
 
 #include "FormMain.h"
 

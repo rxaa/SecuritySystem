@@ -1,4 +1,4 @@
-#include "stdafx.h"
+ï»¿#include "stdafx.h"
 #include "DirectFunc.h"
 
 DirectFunc::DirectProcFunc DirectFunc::FuncList[Direct::_DirectEnd];
@@ -20,7 +20,7 @@ template<>
 void DirectProc<Direct::GetHost>::Func(MainConnecter * con, char *, uint)
 {
 	char szHostName[256] = { 0 };
-	//µ÷ÓÃAPIÀ´»ñµÃÖ÷»úÃû;
+	//è°ƒç”¨APIæ¥è·å¾—ä¸»æœºå;
 	int nRetCode = gethostname(szHostName, sizeof(szHostName));
 	if (nRetCode != 0)
 	{
@@ -36,7 +36,7 @@ void DirectProc<Direct::GetHost>::Func(MainConnecter * con, char *, uint)
 template<>
 void DirectProc<Direct::ResponseHost>::Func(MainConnecter * con, char * msg, uint size)
 {
-	//Á¬½Ó³É¹¦,¸üĞÂ·şÎñÆ÷ÁĞ±í
+	//è¿æ¥æˆåŠŸ,æ›´æ–°æœåŠ¡å™¨åˆ—è¡¨
 	LOCKED(G::listLock_);
 	G::serverList_.Add(con);
 

@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 
 class FormCrypt :
@@ -31,10 +31,10 @@ public:
 	void ViewDoubleClick(int i);
 	void ViewClick(int i);
 
-	//�ϲ�Ŀ¼
+	//上层目录
 	void OnButtonBackClick();
 
-	//��ʾĿ¼����
+	//显示目录内容
 	void ShowMenuContent(CC menu);
 
 	void OnEncryptClick();

@@ -1,19 +1,22 @@
-#pragma once
+ï»¿#pragma once
+
 
 class MainModel
 {
 public:
+	//é»˜è®¤ç›‘å¬ç«¯å£
+	static const int defaultPort_ = 19836;
 
-	//ÎÄ¼ş¼ÓÃÜÄ¬ÈÏÄ¿Â¼
+	//æ–‡ä»¶åŠ å¯†é»˜è®¤ç›®å½•
 	SS file_crypt_init_menu;
 
-	//³ÌĞòÆô¶¯Ê±Òş²Ø´°¿Ú
-	bool hide_window;
+	//ç¨‹åºå¯åŠ¨æ—¶éšè—çª—å£
+	bool hide_window = false;
 
-	//¼àÌı¶Ë¿Ú
-	USHORT listen_port;
+	//ç›‘å¬ç«¯å£
+	USHORT listen_port = defaultPort_;
 
-	//·şÎñ¶ËÈÏÖ¤ÃÜÂë,Ä¬ÈÏrxaa+_)(*&^%$#@!
+	//æœåŠ¡ç«¯è®¤è¯å¯†ç ,é»˜è®¤rxaa+_)(*&^%$#@!
 	SS access_psw;
 
 	META_DATA_INIT;

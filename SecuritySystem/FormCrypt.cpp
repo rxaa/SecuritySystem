@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+ï»¿#include "StdAfx.h"
 #include "FormCrypt.h"
 
 #include "../../df/cryptology/Crypt.h"
@@ -25,8 +25,8 @@ void FormCrypt::OnInit()
 	imageList_.Add(IDB_BITMAP4);
 
 	viewFile_.Init(IDC_LIST1);
-	viewFile_.AddColumn(cct_("Ãû³Æ"), 388);
-	viewFile_.AddColumn(cct_("´óĞ¡"), 222);
+	viewFile_.AddColumn(cct_("åç§°"), 388);
+	viewFile_.AddColumn(cct_("å¤§å°"), 222);
 	viewFile_.SetImageList(imageList_);
 	viewFile_.onDoubleClick_ = [&](int i){
 		ViewDoubleClick(i);
@@ -77,12 +77,12 @@ void FormCrypt::OnInit()
 		ShowMenuContent(diskList_.GetText());
 	};
 
-	///»ñÈ¡´ÅÅÌÁĞ±í
+	///è·å–ç£ç›˜åˆ—è¡¨
 	df::EachDisk([&](DiskInfo & disk){
 		disk.name_[2] = tt_('\\');
 		diskList_.Add(CC(disk.name_, 3));
 	});
-	//ÏÔÊ¾ÉÏ´ÎÄ¿Â¼
+	//æ˜¾ç¤ºä¸Šæ¬¡ç›®å½•
 	diskList_.SetText(G::main.file_crypt_init_menu);
 	ShowMenuContent(G::main.file_crypt_init_menu);
 }
@@ -149,21 +149,21 @@ void FormCrypt::OnEncryptClick()
 	int index = viewFile_.GetSelectIndex();
 	if (index < 0 || index < dirList_.listDir_.Size())
 	{
-		PopMessage(cct_("ÇëÑ¡ÔñÒª¼ÓÃÜµÄÎÄ¼ş!"));
+		PopMessage(cct_("è¯·é€‰æ‹©è¦åŠ å¯†çš„æ–‡ä»¶!"));
 		return;
 	}
 
 	SS psw = password_.GetText();
 	if (psw == cct_(""))
 	{
-		PopMessage(cct_("ÇëÊäÈëÃÜÂë!"));
+		PopMessage(cct_("è¯·è¾“å…¥å¯†ç !"));
 		password_.SetFocus();
 		return;
 	}
 	SS enFile = txtEn_.GetText();
 	if (enFile == cct_(""))
 	{
-		PopMessage(cct_("ÇëÊäÈëÉú³ÉÎÄ¼şÃû!"));
+		PopMessage(cct_("è¯·è¾“å…¥ç”Ÿæˆæ–‡ä»¶å!"));
 		return;
 	}
 	SS menu = diskList_.GetText();
@@ -182,11 +182,11 @@ void FormCrypt::OnEncryptClick()
 			ON_EXIT({
 				isCrypting_ = false;
 			});
-			winPtr->txtInfo_.SetText(cct_("ÕıÔÚ¼ÓÃÜ:") + selectFile);
+			winPtr->txtInfo_.SetText(cct_("æ­£åœ¨åŠ å¯†:") + selectFile);
 
 			auto lamb = [&](long long fileSize, long long succedSize){
 				if (IsClosed())
-					Throw(cct_("¼ÓÃÜÖĞ¶Ï!"));
+					Throw(cct_("åŠ å¯†ä¸­æ–­!"));
 
 				progress_.SetProgressPos(int(succedSize * 100 / fileSize));
 			};
@@ -204,12 +204,12 @@ void FormCrypt::OnEncryptClick()
 				df::Crypt::EncryptFile<df::CryptMode::DES_CBC>(menu + selectFile, menu + enFile, psw, lamb);
 				break;
 			default:
-				MessageERR(cct_("Î´ÖªËã·¨:") + cryptMode_.GetText());
+				MessageERR(cct_("æœªçŸ¥ç®—æ³•:") + cryptMode_.GetText());
 				break;
 			}
 
 			winPtr->buttonRefresh_.onClick_();
-			winPtr->Message(cct_("¼ÓÃÜÍê³É!"));
+			winPtr->Message(cct_("åŠ å¯†å®Œæˆ!"));
 		}
 		catch (df::WinException & we)
 		{
@@ -233,21 +233,21 @@ void FormCrypt::OnDecryptClick()
 	int index = viewFile_.GetSelectIndex();
 	if (index < 0 || index < dirList_.listDir_.Size())
 	{
-		PopMessage(cct_("ÇëÑ¡ÔñÒª½âÃÜµÄÎÄ¼ş!"));
+		PopMessage(cct_("è¯·é€‰æ‹©è¦è§£å¯†çš„æ–‡ä»¶!"));
 		return;
 	}
 
 	SS psw = password_.GetText();
 	if (psw == cct_(""))
 	{
-		PopMessage(cct_("ÇëÊäÈëÃÜÂë!"));
+		PopMessage(cct_("è¯·è¾“å…¥å¯†ç !"));
 		password_.SetFocus();
 		return;
 	}
 	SS enFile = txtDe_.GetText();
 	if (enFile == cct_(""))
 	{
-		PopMessage(cct_("ÇëÊäÈëÉú³ÉÎÄ¼şÃû!"));
+		PopMessage(cct_("è¯·è¾“å…¥ç”Ÿæˆæ–‡ä»¶å!"));
 		return;
 	}
 	SS menu = diskList_.GetText();
@@ -266,19 +266,19 @@ void FormCrypt::OnDecryptClick()
 			ON_EXIT({
 				isCrypting_ = false;
 			});
-			winPtr->txtInfo_.SetText(cct_("ÕıÔÚ½âÃÜ:") + selectFile);
+			winPtr->txtInfo_.SetText(cct_("æ­£åœ¨è§£å¯†:") + selectFile);
 			df::Crypt::DecryptFile(menu + selectFile, menu + enFile, psw
 				, [&](long long fileSize, long long succedSize){
 
 					if (IsClosed())
-						Throw(cct_("½âÃÜÖĞ¶Ï!"));
+						Throw(cct_("è§£å¯†ä¸­æ–­!"));
 
 					progress_.SetProgressPos(int(succedSize * 100 / fileSize));
 
 			});
 
 			winPtr->buttonRefresh_.onClick_();
-			winPtr->Message(cct_("½âÃÜÍê³É!"));
+			winPtr->Message(cct_("è§£å¯†å®Œæˆ!"));
 		}
 		catch (df::WinException & we)
 		{

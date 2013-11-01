@@ -1,4 +1,4 @@
-// SecuritySystem.cpp : ¶¨ÒåÓ¦ÓÃ³ÌĞòµÄÈë¿Úµã¡£
+ï»¿// SecuritySystem.cpp : å®šä¹‰åº”ç”¨ç¨‹åºçš„å…¥å£ç‚¹ã€‚
 //
 
 #include "stdafx.h"
@@ -12,7 +12,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 {
 	if (::FindWindow(0, t_t("Security System")) != 0)
 	{
-		df::msg(t_t("³ÌĞòÕıÔÚÔËĞĞ!"));
+		df::msg(t_t("ç¨‹åºæ­£åœ¨è¿è¡Œ!"));
 		return 0;
 	}
 
@@ -50,7 +50,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 //////////////////////////////////////////////////////////////////////////
 
 
-MainModel G::main{ tcc_(""), false, defaultPort_ };
+MainModel G::main;
 
 List < G::ConnectPtr> G::serverList_;
 df::Lock G::listLock_;

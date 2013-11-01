@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "../../window/Reg.h"
 
 class FormSet :

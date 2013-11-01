@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+ï»¿#include "StdAfx.h"
 #include "FormMain.h"
 #include "FormAbout.h"
 #include "FormCrypt.h"
@@ -53,10 +53,10 @@ void FormMain::OnInit()
 	viewHost_.Init(IDC_LIST1);
 	viewHost_.AddColumn(cct_("UID"));
 	viewHost_.AddColumn(cct_("IP"), 150);
-	viewHost_.AddColumn(cct_("¼ÆËã»úÃû"), 150);
+	viewHost_.AddColumn(cct_("è®¡ç®—æœºå"), 150);
 
 	hostCount_.Init(IDC_EDIT1);
-	hostCount_.SetText(cct_("ÒÑÁ¬½ÓÖ÷»úÊı:0"));
+	hostCount_.SetText(cct_("å·²è¿æ¥ä¸»æœºæ•°:0"));
 
 	buttonCancel_.Init(IDC_EXIT);
 	buttonCancel_.onDraw_ = Button::RedButton;

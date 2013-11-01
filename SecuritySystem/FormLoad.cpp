@@ -1,4 +1,4 @@
-#include "stdafx.h"
+ï»¿#include "stdafx.h"
 #include "FormLoad.h"
 
 
@@ -18,7 +18,7 @@ void FormLoad::OnInit()
 
 	if (!pic_.Load(IDB_PNG1))
 	{
-		PopMessage(tcc_("Í¼Æ¬¼ÓÔØÊ§°Ü!"));
+		PopMessage(tcc_("å›¾ç‰‡åŠ è½½å¤±è´¥!"));
 	}
 	else
 	{

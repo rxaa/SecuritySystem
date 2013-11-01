@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #include "../../df/socket/IocpSocket.h"
 #include "../../df/cryptology/Crypt.h"
@@ -12,32 +12,29 @@ class MainConnecter
 	: public df::IocpConnecter
 {
 public:
-	MainConnecter()
-		: hasSessionKey_(false)
-		, isClient_(false)
-	{}
 
-	//ÈÏÖ¤¿ÚÁî
+
+	//è®¤è¯å£ä»¤
 	static const uint16_t verifyWord_ = 65535;
 
-	//»á»°ÃÜÔ¿Ç°2¸ö×Ö½Ú
+	//ä¼šè¯å¯†é’¥å‰2ä¸ªå­—èŠ‚
 	static const uint16_t verifyPsw_ = 12345;
 
-	//°üÍ·³¤¶È:4×Ö½Ú°ü³¤¶È,1×Ö½ÚÄ©Î²²¹0,2×Ö½ÚÖ¸Áî´úºÅ......4×Ö½ÚÈÏÖ¤¿ÚÁî
+	//åŒ…å¤´é•¿åº¦:4å­—èŠ‚åŒ…é•¿åº¦,1å­—èŠ‚æœ«å°¾è¡¥0,2å­—èŠ‚æŒ‡ä»¤ä»£å·......4å­—èŠ‚è®¤è¯å£ä»¤
 	static const uint32_t headerSize_ = 4 + 1 + 2 + 4;
 	static const uint32_t packageHeaderSize_ = 1 + 2 + 4;
 	static const uint32_t uncryptHeaderSize_ = 4;
 
-	bool hasSessionKey_;
-	bool isClient_;
+	bool hasSessionKey_ =false;
+	bool isClient_ = false;
 
-	//»á»°¼ÓÃÜ
+	//ä¼šè¯åŠ å¯†
 	df::CryptAlg <df::CryptMode::AES_CBC> SessionCrypt_;
-	//ÈÏÖ¤¼ÓÃÜ
+	//è®¤è¯åŠ å¯†
 	static df::CryptAlg <df::CryptMode::AES_CBC> VerifyCrypt_;
 
 
-	//³õÊ¼»¯ÈÏÖ¤ÃÜÔ¿
+	//åˆå§‹åŒ–è®¤è¯å¯†é’¥
 	static void InitVerifyKey();
 
 	void OnConnect() override;

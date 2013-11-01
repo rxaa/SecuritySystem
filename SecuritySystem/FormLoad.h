@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 
 class FormLoad :
@@ -10,7 +10,7 @@ public:
 
 	
 	Bitmap pic_;
-	//ÕýÔÚ²¥·ÅµÄÍ¼Æ¬Ë÷Òý
+	//æ­£åœ¨æ’­æ”¾çš„å›¾ç‰‡ç´¢å¼•
 	int picI_;
 	static const int picCount_ = 8;
 
