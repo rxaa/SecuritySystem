@@ -50,7 +50,30 @@ void DirectProc<Direct::ResponseHost>::Func(MainConnecter * con, char * msg, uin
 
 }
 
+template<>
+void DirectProc<Direct::GetCmd>::Func(MainConnecter * con, char * msg, uint size)
+{
+	if (!con->cmd_ || con->cmd_->IsClosed())
+	{
+		con->cmd_.reset(new df::cmd());
 
+		ConnPtr ptr(con);
+
+		df::AsyncStart([=]{
+
+			ptr->cmd_->Read([&](CC str){
+				ptr->Send(Direct::ResponseCmd, str);
+			});
+
+		});
+	}
+}
+
+template<>
+void DirectProc<Direct::ResponseCmd>::Func(MainConnecter * con, char * msg, uint size)
+{
+
+}
 
 template<unsigned I>
 struct InitProc

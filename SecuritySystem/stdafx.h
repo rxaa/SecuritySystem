@@ -33,6 +33,8 @@
 using namespace sdf;
 
 //////////////////////////////////////////////////////////////////////////
+class MainConnecter;
+typedef df::IntoPtr<MainConnecter> ConnPtr;
 
 #include "Resource.h"
 

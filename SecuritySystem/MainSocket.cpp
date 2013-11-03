@@ -3,6 +3,8 @@
 #include "../../df/cryptology/sha2.h"
 
 
+
+
 df::CryptAlg <df::CryptMode::AES_CBC> MainConnecter::VerifyCrypt_;
 
 
@@ -31,6 +33,11 @@ void MainConnecter::OnConnect()
 
 void MainConnecter::OnClosed()
 {
+	if (cmd_)
+	{
+		cmd_->Close();
+	}
+
 	if (isClient_)
 	{
 		LOCKED(G::listLock_);
@@ -161,7 +168,7 @@ void MainConnecter::InitVerifyKey()
 {
 	if (G::main.access_psw.Length() == 0)
 	{
-		G::main.access_psw = tcc_("rxaa+_)(*&^%$#@!");
+		G::main.access_psw = tcc_("rxaa");
 		Sha2Password(G::main.access_psw);
 	}
 	unsigned char verifyKey[16] = { 0 };

@@ -5,6 +5,8 @@ enum Direct
 {
 	GetHost,
 	ResponseHost,
+	GetCmd,
+	ResponseCmd,
 	//Ping,
 	//ResponsePing,
 

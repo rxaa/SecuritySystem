@@ -5,6 +5,7 @@
 #include "FormConnect.h"
 #include "FormSet.h"
 #include "FormRemoteFile.h"
+#include "FormCMD.h"
 
 FormMain::FormMain(void)
 {
@@ -27,6 +28,7 @@ void FormMain::OnInit()
 	buttonConnect_.onClick_ = [&](){
 		NewWindow<FormConnect>()->OpenModal(this);
 	};
+
 
 	buttionFile_.Init(IDC_BUTTON1);
 	buttionFile_.onClick_ = [&](){
@@ -118,12 +120,16 @@ void FormMain::RemoteFile()
 
 void FormMain::CommanLine()
 {
+	LOCKED(G::listLock_);
+
 	int i = viewHost_.GetSelectIndex();
-	if (i < 0)
+	if (i < 0 || i >= G::serverList_.Count())
 	{
 		PopHostErrMsg();
 		return;
 	}
+
+	NewWindow < FormCMD>(G::serverList_[i])->Open();
 }
 
 void FormMain::RemoteProcess()

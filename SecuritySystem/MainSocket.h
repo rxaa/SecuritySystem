@@ -2,10 +2,14 @@
 
 #include "../../df/socket/IocpSocket.h"
 #include "../../df/cryptology/Crypt.h"
+#include "../../df/cmd.h"
 
+#include "FormCMD.h"
 
 void Sha2PasswordBuf(SS & psw, unsigned char sha2Res[32]);
 void Sha2Password(SS & psw);
+
+
 
 
 class MainConnecter
@@ -25,8 +29,12 @@ public:
 	static const uint32_t packageHeaderSize_ = 1 + 2 + 4;
 	static const uint32_t uncryptHeaderSize_ = 4;
 
-	bool hasSessionKey_ =false;
+	bool hasSessionKey_ = false;
 	bool isClient_ = false;
+
+	std::unique_ptr<df::cmd> cmd_;
+
+	FormCMD * formCmdPtr_ = nullptr;
 
 	//会话加密
 	df::CryptAlg <df::CryptMode::AES_CBC> SessionCrypt_;
@@ -46,5 +54,6 @@ public:
 		return Send(directive, (char*)str.char_, (str.length_ + 1) * sizeof(TCHAR));
 	}
 };
+
 
 
