@@ -7,6 +7,7 @@ enum Direct
 	ResponseHost,
 	GetCmd,
 	ResponseCmd,
+	CloseCmd,
 	//Ping,
 	//ResponsePing,
 

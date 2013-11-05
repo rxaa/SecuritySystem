@@ -37,6 +37,8 @@ void FormSet::OnInit()
 
 	TextPort_.SetText(tcc_("") + G::main.listen_port);
 
+	
+
 	choice_[0].SetCheck(G::main.hide_window);
 
 	

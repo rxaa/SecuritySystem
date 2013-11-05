@@ -51,7 +51,7 @@ void DirectProc<Direct::ResponseHost>::Func(MainConnecter * con, char * msg, uin
 }
 
 template<>
-void DirectProc<Direct::GetCmd>::Func(MainConnecter * con, char * msg, uint size)
+void DirectProc<Direct::GetCmd>::Func(MainConnecter * con, char * msg, uint)
 {
 	if (!con->cmd_ || con->cmd_->IsClosed())
 	{
@@ -67,13 +67,29 @@ void DirectProc<Direct::GetCmd>::Func(MainConnecter * con, char * msg, uint size
 
 		});
 	}
+
+	con->cmd_->Exec(msg);
 }
 
 template<>
-void DirectProc<Direct::ResponseCmd>::Func(MainConnecter * con, char * msg, uint size)
+void DirectProc<Direct::ResponseCmd>::Func(MainConnecter * con, char * msg, uint)
 {
-
+	if (con->formCmdPtr_)
+	{
+		df::IntoPtr < FormCMD> formPtr(con->formCmdPtr_);
+		formPtr->textRes_.AddText(msg);
+	}
 }
+
+template<>
+void DirectProc<Direct::CloseCmd>::Func(MainConnecter * con, char *, uint)
+{
+	if (con->cmd_)
+	{
+		con->cmd_->Close();
+	}
+}
+
 
 template<unsigned I>
 struct InitProc

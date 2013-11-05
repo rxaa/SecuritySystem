@@ -11,7 +11,7 @@ df::CryptAlg <df::CryptMode::AES_CBC> MainConnecter::VerifyCrypt_;
 void MainConnecter::OnConnect()
 {
 	::srand(GetTickCount());
-	
+
 	uint16_t sessionKey[8];
 
 	sessionKey[0] = verifyPsw_;
@@ -53,10 +53,10 @@ void MainConnecter::OnClosed()
 					FormMain::ptr_->viewHost_.Delete(i);
 					FormMain::ptr_->UpdateHostCount();
 				}
-					
+
 				return;
 			}
-		}		
+		}
 	}
 }
 
@@ -64,12 +64,14 @@ void MainConnecter::OnClosed()
 
 void MainConnecter::OnRecv(char * msg, uint length)
 {
+	//COUT(tcc_("OnRecv") << length);
 	//后续会话
 	if (hasSessionKey_)
 	{
-		if (length < 16)//包长度过小,非法连接
+		if (length % 16 > 0)//包长度不正确,非法连接
 		{
-			df::WriteLog(tcc_("包长度过小,非法连接:") + GetRemoteIpStr());
+			COUT(tcc_("包长不正确,非法连接:") + GetRemoteIpStr());
+			df::WriteLog(tcc_("包长不正确,非法连接:") + GetRemoteIpStr());
 			Close();
 			return;
 		}
@@ -84,6 +86,7 @@ void MainConnecter::OnRecv(char * msg, uint length)
 
 		if (footZero >= length) // 包长度过小, 非法连接
 		{
+			COUT(tcc_("包长小于补0,非法连接:") + GetRemoteIpStr());
 			df::WriteLog(tcc_("包长小于补0,非法连接:") + GetRemoteIpStr());
 			Close();
 			return;
@@ -97,6 +100,7 @@ void MainConnecter::OnRecv(char * msg, uint length)
 
 		if ((word1 ^ word2) != verifyWord_)//认证失败,非法连接
 		{
+			COUT(tcc_("认证失败,非法连接:") + GetRemoteIpStr());
 			df::WriteLog(tcc_("认证失败,非法连接:") + GetRemoteIpStr());
 			Close();
 			return;
@@ -178,11 +182,13 @@ void MainConnecter::InitVerifyKey()
 
 bool MainConnecter::Send(uint16_t directive, const char *msg, uint len)
 {
+	//COUT(tcc_("Send") << len);
 	MY_ASSERT(directive < Direct::_DirectEnd);
 	MY_ASSERT(hasSessionKey_);
 
 	if ((msg == nullptr && len > 0) || len > df::IocpOverlap::MAX_PACKAGE_SIZE)
 	{
+		COUT(tcc_("IocpConnecter::Send非法参数") << len);
 		BREAK_POINT_MSG("IocpConnecter::Send非法参数");
 		return false;
 	}
@@ -204,6 +210,7 @@ bool MainConnecter::Send(uint16_t directive, const char *msg, uint len)
 	uint newSize = len + headerSize_ + footZero;
 	auto io = df::IocpOverlap::New(newSize, this);
 
+	//COUT(tcc_("df::IocpOverlap::New ") << newSize);
 	uint8_t * hp = (uint8_t *)io->buffer_;
 
 	//4字节包长度
@@ -237,6 +244,7 @@ bool MainConnecter::Send(uint16_t directive, const char *msg, uint len)
 	//从补0处开始加密
 	SessionCrypt_.Encrypt(io->buffer_ + uncryptHeaderSize_, io->buffer_ + uncryptHeaderSize_, newSize - uncryptHeaderSize_);
 
+	
 	return SendIocpOverlap(io, newSize);
 }
 

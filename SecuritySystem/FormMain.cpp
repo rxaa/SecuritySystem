@@ -16,6 +16,8 @@ FormMain::FormMain(void)
 
 FormMain::~FormMain(void)
 {
+	LOCKED(G::listLock_);
+
 	ptr_ = nullptr;
 }
 
@@ -108,6 +110,8 @@ void FormMain::OnInit()
 
 void FormMain::RemoteFile()
 {
+	//LOCKED(G::listLock_);
+
 	int i = viewHost_.GetSelectIndex();
 	if (i < 0)
 	{
@@ -140,6 +144,7 @@ void FormMain::RemoteProcess()
 		PopHostErrMsg();
 		return;
 	}
+	viewHost_.AddRow(tcc_("123"), tcc_("123"));
 }
 
 FormMain * FormMain::ptr_ = nullptr;

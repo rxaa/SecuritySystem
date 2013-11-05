@@ -17,7 +17,8 @@ void FormConnect::OnInit()
 	textHostName_.Init(IDC_COMBO1);
 	textPSW_.Init(IDC_EDIT2);
 
-
+	textHostName_.SetText(tcc_("localhost"));
+	textPSW_.SetText(tcc_("rxaa"));
 
 	butOK_.onClick_ = [&]{
 
@@ -35,7 +36,10 @@ void FormConnect::OnInit()
 			return;
 		}
 
+		COUT(tcc_("--"));
 		df::IntoPtr<FormConnect> formPtr(this);
+
+		//formPtr->ConnectHost(*NewWindow<FormLoad>().Get());
 
 		FormLoad::RunAsync(tcc_("正在连接中..."), this, [=](FormLoad & formLoading){
 			formPtr->ConnectHost(formLoading);

@@ -34,14 +34,21 @@
 #define IDC_BUTTON3                     1005
 #define IDC_BUTTON4                     1006
 #define IDC_COMBO1                      1007
+#define IDC_BUTTON5                     1007
 #define IDC_CHECK1                      1008
+#define IDC_BUTTON6                     1008
 #define IDC_PROGRESS1                   1009
 #define IDC_EDIT1                       1010
 #define IDC_EDIT2                       1011
 #define IDC_COMBO2                      1012
+#define IDC_BUTTON7                     1012
 #define IDC_EDIT3                       1013
 #define IDC_EDIT4                       1014
 #define IDC_CHECK2                      1015
+#define IDC_LIST2                       1016
+#define IDC_LIST4                       1018
+#define IDC_COMBO3                      1019
+#define IDC_COMBO4                      1020
 #define ID_32771                        32771
 #define ID_32772                        32772
 #define ID_32773                        32773
@@ -62,7 +69,7 @@
 #define _APS_NO_MFC                     1
 #define _APS_NEXT_RESOURCE_VALUE        143
 #define _APS_NEXT_COMMAND_VALUE         32782
-#define _APS_NEXT_CONTROL_VALUE         1016
+#define _APS_NEXT_CONTROL_VALUE         1020
 #define _APS_NEXT_SYMED_VALUE           110
 #endif
 #endif
