@@ -4,8 +4,9 @@ class FormRemoteFile :
 	public Window
 {
 public:
-	FormRemoteFile();
+	FormRemoteFile(ConnPtr & con);
 	~FormRemoteFile();
+
 
 	Button buttonLocalRet_;
 	Button buttonRemoteRet_;
@@ -16,7 +17,7 @@ public:
 	Button buttonProperty_;
 	Button buttonDelete_;
 
-	ListView viewLocal_;
+	FileListView viewLocal_;
 	ListView viewRemote_;
 
 	ListView viewQueue_;
@@ -27,7 +28,14 @@ public:
 	TextBox textInfo_;
 	Control progress_;
 
+	ConnPtr con_;
+
 	void OnInit() override;
 	void OnLayout() override;
+
+	void RemoteDoubleClick(int i);
+
+	void GetRemoteFileList(CC menu);
+
 };
 

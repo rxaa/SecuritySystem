@@ -1,19 +1,26 @@
 ﻿#pragma once
 
 //所有指令
-enum Direct
+
+struct Direct
 {
-	GetHost,
-	ResponseHost,
-	GetCmd,
-	ResponseCmd,
-	CloseCmd,
-	//Ping,
-	//ResponsePing,
+	enum
+	{
+		GetHost,
+		ResponseHost,
+		GetCmd,
+		ResponseCmd,
+		CloseCmd,
+		GetMenu,
+		ResponseMenu,
+		//Ping,
+		//ResponsePing,
 
 
 
-	_DirectEnd,
+		_DirectEnd,
+	};
+
 };
 
 class MainConnecter;

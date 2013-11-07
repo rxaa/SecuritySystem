@@ -90,6 +90,66 @@ void DirectProc<Direct::CloseCmd>::Func(MainConnecter * con, char *, uint)
 	}
 }
 
+template<>
+void DirectProc<Direct::GetMenu>::Func(MainConnecter * con, char *msg, uint)
+{
+	CC menu(msg);
+	SS res(256);
+
+	//数据结构:目录名\n类型\n信息
+	//目录类型:0磁盘,1目录,2文件
+	if (menu.Length() == 0)
+	{
+		df::EachDisk([&](DiskInfo & disk){
+			res << disk.name_ << tcc_("\n0\n");
+			res << DiskInfo::typeInfo[disk.type_];
+			res.AddByte(disk.freeSize_) << cct_(" / ");
+			res.AddByte(disk.totalSize_) << '\n';
+		});
+	}
+	else
+	{
+		df::EachDir(menu, [&](FileInfo & file){
+			if (file.IsDir())
+			{
+				res << file.name_ << tcc_("\n1\n\n");
+			}
+			else
+			{
+				res << file.name_ << tcc_("\n2\n");
+				res.AddByte(file.size_) << '\n';
+			}
+		});
+	}
+
+	res << tcc_("abc");
+
+	con->Send(Direct::ResponseMenu, res);
+
+}
+
+template<>
+void DirectProc<Direct::ResponseMenu>::Func(MainConnecter * con, char * msg, uint len)
+{
+	if (con->formFile_ == nullptr)
+		return;
+
+	df::IntoPtr < FormRemoteFile> formPtr(con->formFile_);
+
+	int i = 0;
+	CC res[3];
+	CC::Split(msg, len, [&](CC c){
+		res[i] = c;
+		i++;
+		if (i >= 3)
+		{
+			if (res[1].Length() != 1)//数据出错
+				return;
+			formPtr->viewRemote_.AddImageRow(res[1][0] - '0', res[0], res[2]);
+			i = 0;
+		}
+	});
+}
 
 template<unsigned I>
 struct InitProc

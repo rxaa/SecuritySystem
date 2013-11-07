@@ -17,7 +17,6 @@ public:
 	void OnInit() override;
 
 	void OnResize() override;
-	void OnKeyUp(int key) override;
 
 	void SendCmd();
 };

@@ -110,16 +110,16 @@ void FormMain::OnInit()
 
 void FormMain::RemoteFile()
 {
-	//LOCKED(G::listLock_);
+	LOCKED(G::listLock_);
 
 	int i = viewHost_.GetSelectIndex();
-	if (i < 0)
+	if (i < 0 || i >= G::serverList_.Count())
 	{
 		PopHostErrMsg();
 		return;
 	}
 
-	NewWindow<FormRemoteFile>()->Open();
+	NewWindow<FormRemoteFile>(G::serverList_[i])->Open();
 }
 
 void FormMain::CommanLine()

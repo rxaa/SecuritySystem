@@ -266,6 +266,9 @@
     <ClInclude Include="FormCMD.h">
       <Filter>Form</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\window\FileListView.h">
+      <Filter>Window</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

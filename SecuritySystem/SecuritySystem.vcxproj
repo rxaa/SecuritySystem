@@ -155,6 +155,7 @@
     <ClInclude Include="..\..\window\ChoiceBox.h" />
     <ClInclude Include="..\..\window\ComBox.h" />
     <ClInclude Include="..\..\window\Control.h" />
+    <ClInclude Include="..\..\window\FileListView.h" />
     <ClInclude Include="..\..\window\Font.h" />
     <ClInclude Include="..\..\window\Gdi.h" />
     <ClInclude Include="..\..\window\gdiP.h" />

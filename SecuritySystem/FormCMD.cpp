@@ -72,8 +72,3 @@ void FormCMD::SendCmd()
 	textCom_.SetText(tcc_(""));
 	textCom_.SetFocus();
 }
-
-void FormCMD::OnKeyUp(int key)
-{
-	COUT(key);
-}

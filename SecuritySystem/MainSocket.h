@@ -5,6 +5,7 @@
 #include "../../df/cmd.h"
 
 #include "FormCMD.h"
+#include "FormRemoteFile.h"
 
 void Sha2PasswordBuf(SS & psw, unsigned char sha2Res[32]);
 void Sha2Password(SS & psw);
@@ -35,6 +36,7 @@ public:
 	std::unique_ptr<df::cmd> cmd_;
 
 	FormCMD * formCmdPtr_ = nullptr;
+	FormRemoteFile * formFile_ = nullptr;
 
 	//会话加密
 	df::CryptAlg <df::CryptMode::AES_CBC> SessionCrypt_;
