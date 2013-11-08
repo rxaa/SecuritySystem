@@ -11,6 +11,25 @@ void Sha2PasswordBuf(SS & psw, unsigned char sha2Res[32]);
 void Sha2Password(SS & psw);
 
 
+struct FileConnect
+{
+	df::FileBin file_;
+	FormRemoteFile * form_ = nullptr;
+	//文件已传输长度
+	long long transferedSize_ = 0;
+
+	//回调
+	std::function < void()> onTransfer_ ;
+	std::function < void()> onCompleted_ ;
+
+	FileConnect()
+		: onTransfer_([](){})
+		, onCompleted_([](){})
+	{
+	}
+
+	DISABLE_COPY_ASSIGN(FileConnect);
+};
 
 
 class MainConnecter
@@ -18,6 +37,9 @@ class MainConnecter
 {
 public:
 
+
+	MainConnecter(){}
+	~MainConnecter();
 
 	//认证口令
 	static const uint16_t verifyWord_ = 65535;
@@ -34,8 +56,12 @@ public:
 	bool isClient_ = false;
 
 	std::unique_ptr<df::cmd> cmd_;
+	std::unique_ptr<FileConnect> file_;
+	uint8_t connectKey[16];
 
+	//dos命令窗口
 	FormCMD * formCmdPtr_ = nullptr;
+	//远程文件管理窗口
 	FormRemoteFile * formFile_ = nullptr;
 
 	//会话加密
@@ -55,6 +81,12 @@ public:
 	{
 		return Send(directive, (char*)str.char_, (str.length_ + 1) * sizeof(TCHAR));
 	}
+
+	FileConnect & DownloadFileInit();
+	//新建连接并开始下载,失败抛df::WinException异常
+	void DownloadFileStart();
+
+
 };
 
 

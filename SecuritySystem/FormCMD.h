@@ -16,8 +16,6 @@ public:
 
 	void OnInit() override;
 
-	void OnResize() override;
-
 	void SendCmd();
 };
 

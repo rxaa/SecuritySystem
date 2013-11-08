@@ -18,7 +18,9 @@ FormRemoteFile::~FormRemoteFile()
 void FormRemoteFile::OnInit()
 {
 	buttonLocalRet_.Init(IDC_BUTTON2);
+	buttonLocalRet_.onDraw_ = Button::GreenButton;
 	buttonRemoteRet_.Init(IDC_BUTTON3);
+	buttonRemoteRet_.onDraw_ = Button::GreenButton;
 	buttonLocalRefresh_.Init(IDC_BUTTON5);
 	buttonRemoteRefresh_.Init(IDC_BUTTON6);
 	buttonDownload_.Init(IDOK);
@@ -41,9 +43,20 @@ void FormRemoteFile::OnInit()
 		viewLocal_.SetFocus();
 	};
 
+
 	buttonLocalRefresh_.onClick_ = [&](){
 		comLocal_.GetText(viewLocal_.currentMenu_);
 		viewLocal_.Refresh();
+		viewLocal_.SetFocus();
+	};
+
+	buttonRemoteRet_.onClick_ = [&](){
+		RemoteMenuBack();
+	};
+
+	buttonRemoteRefresh_.onClick_ = [&](){
+		GetRemoteFileList(comRemote_.GetText());
+		viewRemote_.SetFocus();
 	};
 
 	viewLocal_.AddColumn(tcc_("本地文件"), 300);
@@ -134,11 +147,33 @@ void FormRemoteFile::OnLayout()
 
 void FormRemoteFile::RemoteDoubleClick(int i)
 {
+	if (i < 0 || i >= remoteDirCount_)
+		return;
 
+	SS menu = comRemote_.GetText();
+
+	menu << viewRemote_.GetText(i, 0) << cct_("\\");
+	comRemote_.SetText(menu);
+	GetRemoteFileList(menu);
 }
 
 void FormRemoteFile::GetRemoteFileList(CC menu)
 {
 	if (!con_->Send(Direct::GetMenu, menu))
 		MessageERR(tcc_("网络错误!"));
+}
+
+void FormRemoteFile::RemoteMenuBack()
+{
+	SS menu = comRemote_.GetText();
+	auto pos = menu.Find(tt_('\\'), menu.Length() - 2, false);
+	if (pos > 0)
+		menu.SetSize(pos + 1);
+	else
+		menu.ClearString();
+
+	comRemote_.SetText(menu);
+	GetRemoteFileList(menu);
+
+	viewRemote_.SetFocus();
 }

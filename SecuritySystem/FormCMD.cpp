@@ -45,10 +45,6 @@ void FormCMD::OnInit()
 
 }
 
-void FormCMD::OnResize()
-{
-
-}
 
 void FormCMD::SendCmd()
 {

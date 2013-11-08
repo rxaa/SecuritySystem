@@ -104,7 +104,7 @@ void DirectProc<Direct::GetMenu>::Func(MainConnecter * con, char *msg, uint)
 			res << disk.name_ << tcc_("\n0\n");
 			res << DiskInfo::typeInfo[disk.type_];
 			res.AddByte(disk.freeSize_) << cct_(" / ");
-			res.AddByte(disk.totalSize_) << '\n';
+			res.AddByte(disk.totalSize_) << tt_('\n');
 		});
 	}
 	else
@@ -117,12 +117,10 @@ void DirectProc<Direct::GetMenu>::Func(MainConnecter * con, char *msg, uint)
 			else
 			{
 				res << file.name_ << tcc_("\n2\n");
-				res.AddByte(file.size_) << '\n';
+				res.AddByte(file.size_) << tt_('\n');
 			}
 		});
 	}
-
-	res << tcc_("abc");
 
 	con->Send(Direct::ResponseMenu, res);
 
@@ -131,11 +129,15 @@ void DirectProc<Direct::GetMenu>::Func(MainConnecter * con, char *msg, uint)
 template<>
 void DirectProc<Direct::ResponseMenu>::Func(MainConnecter * con, char * msg, uint len)
 {
+	List<CC> fileList_;
+	List<CC> fileInfoList_;
+
 	if (con->formFile_ == nullptr)
 		return;
-
 	df::IntoPtr < FormRemoteFile> formPtr(con->formFile_);
 
+	formPtr->remoteDirCount_ = 0;
+	formPtr->viewRemote_.Clear();
 	int i = 0;
 	CC res[3];
 	CC::Split(msg, len, [&](CC c){
@@ -145,10 +147,25 @@ void DirectProc<Direct::ResponseMenu>::Func(MainConnecter * con, char * msg, uin
 		{
 			if (res[1].Length() != 1)//数据出错
 				return;
-			formPtr->viewRemote_.AddImageRow(res[1][0] - '0', res[0], res[2]);
+			
+			if (res[1][0] != '2')
+			{
+				formPtr->viewRemote_.AddImageRow(res[1][0] - '0', res[0], res[2]);
+				formPtr->remoteDirCount_++;
+			}
+			else
+			{
+				fileList_.Add(res[0]);
+				fileInfoList_.Add(res[2]);
+			}
 			i = 0;
 		}
 	});
+
+	for (int i = 0; i < fileList_.Count(); i++)
+	{
+		formPtr->viewRemote_.AddImageRow(2, fileList_[i], fileInfoList_[i]);
+	}
 }
 
 template<unsigned I>

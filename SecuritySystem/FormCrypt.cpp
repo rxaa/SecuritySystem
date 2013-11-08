@@ -142,6 +142,7 @@ void FormCrypt::OnButtonBackClick()
 
 	diskList_.SetText(menu);
 	ShowMenuContent(menu);
+	viewFile_.SetFocus();
 }
 
 void FormCrypt::OnEncryptClick()

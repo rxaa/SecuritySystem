@@ -26,24 +26,31 @@ void FormMain::OnInit()
 	SetIcon(IDI_ICON1);
 
 	buttonConnect_.Init(IDOK);
+	buttionFile_.Init(IDC_BUTTON1);
+	buttonDisconnect_.Init(IDC_BUTTON2);
+	buttonCmd_.Init(IDC_BUTTON3);
+	buttonProcManag_.Init(IDC_BUTTON4);
+	viewHost_.Init(IDC_LIST1);
+	hostCount_.Init(IDC_EDIT1);
+	buttonCancel_.Init(IDC_EXIT);
+	tary_.Init(cct_("Security System"), IDI_ICON1);
+
+
 	buttonConnect_.onDraw_ = Button::GreenButton;
 	buttonConnect_.onClick_ = [&](){
 		NewWindow<FormConnect>()->OpenModal(this);
 	};
 
 
-	buttionFile_.Init(IDC_BUTTON1);
 	buttionFile_.onClick_ = [&](){
 		RemoteFile();
 	};
 
-	buttonDisconnect_.Init(IDC_BUTTON2);
-	buttonCmd_.Init(IDC_BUTTON3);
+
 	buttonCmd_.onClick_ = [&](){
 		CommanLine();
 	};
 
-	buttonProcManag_.Init(IDC_BUTTON4);
 	buttonProcManag_.onClick_ = [&](){
 		RemoteProcess();
 	};
@@ -54,21 +61,21 @@ void FormMain::OnInit()
 
 	};
 
-	viewHost_.Init(IDC_LIST1);
+
 	viewHost_.AddColumn(cct_("UID"));
 	viewHost_.AddColumn(cct_("IP"), 150);
 	viewHost_.AddColumn(cct_("计算机名"), 150);
 
-	hostCount_.Init(IDC_EDIT1);
+	
 	hostCount_.SetText(cct_("已连接主机数:0"));
 
-	buttonCancel_.Init(IDC_EXIT);
+	
 	buttonCancel_.onDraw_ = Button::RedButton;
 	buttonCancel_.onClick_ = [&]{
 		Close(true);
 	};
 
-	tary_.Init(cct_("Security System"), IDI_ICON1);
+	
 	Tray::OnLeftClick() = [&]{
 		Show();
 	};
@@ -105,7 +112,7 @@ void FormMain::OnInit()
 	AddEvent(ID_32780, [&]{
 		NewWindow<FormConnect>()->OpenModal(this);
 	});
-	
+
 }
 
 void FormMain::RemoteFile()
@@ -118,8 +125,11 @@ void FormMain::RemoteFile()
 		PopHostErrMsg();
 		return;
 	}
-
-	NewWindow<FormRemoteFile>(G::serverList_[i])->Open();
+	auto & server = G::serverList_[i];
+	if (server->formFile_ != nullptr)
+		server->formFile_->SetActive();
+	else
+		NewWindow<FormRemoteFile>(server)->Open();
 }
 
 void FormMain::CommanLine()
@@ -133,7 +143,11 @@ void FormMain::CommanLine()
 		return;
 	}
 
-	NewWindow < FormCMD>(G::serverList_[i])->Open();
+	auto & server = G::serverList_[i];
+	if (server->formCmdPtr_ != nullptr)
+		server->formCmdPtr_->SetActive();
+	else
+		NewWindow < FormCMD>(server)->Open();
 }
 
 void FormMain::RemoteProcess()
@@ -144,7 +158,6 @@ void FormMain::RemoteProcess()
 		PopHostErrMsg();
 		return;
 	}
-	viewHost_.AddRow(tcc_("123"), tcc_("123"));
 }
 
 FormMain * FormMain::ptr_ = nullptr;

@@ -61,6 +61,7 @@ void FormConnect::ConnectHost(FormLoad & formLoading)
 		SS psw = textPSW_.GetText();
 		UCHAR key[32];
 		Sha2PasswordBuf(psw, key);
+		memcpy(con->connectKey, key, 16);
 		con->SessionCrypt_.InitByteKey(key);
 		con->isClient_ = true;
 		con->StartRecvIo();

@@ -8,6 +8,12 @@
 df::CryptAlg <df::CryptMode::AES_CBC> MainConnecter::VerifyCrypt_;
 
 
+MainConnecter::~MainConnecter()
+{
+
+}
+
+
 void MainConnecter::OnConnect()
 {
 	::srand(GetTickCount());
@@ -247,4 +253,17 @@ bool MainConnecter::Send(uint16_t directive, const char *msg, uint len)
 	
 	return SendIocpOverlap(io, newSize);
 }
+
+FileConnect * MainConnecter::DownloadFileInit()
+{
+	if (!file_)
+		file_.reset(new FileConnect);
+	return file_.get();
+}
+
+void MainConnecter::DownloadFileStart(const CC & remoteFile)
+{
+	auto con = df::IocpSocket::Connect<MainConnecter, false>(remoteFile, G::main.listen_port);
+}
+
 

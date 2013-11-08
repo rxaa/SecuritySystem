@@ -30,10 +30,15 @@ public:
 
 	ConnPtr con_;
 
+	int remoteDirCount_ = 0;
+	
+
 	void OnInit() override;
 	void OnLayout() override;
 
+	void RemoteMenuBack();
 	void RemoteDoubleClick(int i);
+
 
 	void GetRemoteFileList(CC menu);
 

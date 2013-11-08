@@ -24,6 +24,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 
 	G::MainListen();
 
+
 #ifdef _TEST
 #	include "Test.h"
 #else
