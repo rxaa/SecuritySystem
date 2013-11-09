@@ -30,6 +30,7 @@ public:
 
 	ConnPtr con_;
 
+
 	int remoteDirCount_ = 0;
 	
 
@@ -41,6 +42,8 @@ public:
 
 
 	void GetRemoteFileList(CC menu);
+
+	void DownloadFile();
 
 };
 

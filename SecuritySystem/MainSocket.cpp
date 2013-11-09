@@ -44,6 +44,24 @@ void MainConnecter::OnClosed()
 		cmd_->Close();
 	}
 
+	if (fileConnect_)
+	{
+		fileConnect_->Close();
+	}
+
+	if (file_)
+	{
+		if (file_->state != FileConnect::StateNone)
+		{
+			try
+			{
+				file_->onError_(TRANS_ERRCODE_NETCLOSED, tcc_("连接断开!"));
+			}CATCH_SEH;
+		}
+
+		file_->Clear();
+	}
+
 	if (isClient_)
 	{
 		LOCKED(G::listLock_);
@@ -150,7 +168,17 @@ void MainConnecter::OnRecv(char * msg, uint length)
 	SessionCrypt_.InitByteKey((unsigned char*)msg);
 	hasSessionKey_ = true;
 
-	//获取主机信息
+
+
+
+	if (file_)//文件传输连接
+	{
+		SendDownloadFile(file_->transferedSize_, file_->fileNameFrom_);
+		return;
+	}
+
+
+	//普通连接,获取主机信息
 	Send(Direct::GetHost, 0, 0);
 }
 
@@ -186,84 +214,108 @@ void MainConnecter::InitVerifyKey()
 	MainConnecter::VerifyCrypt_.InitByteKey(verifyKey);
 }
 
-bool MainConnecter::Send(uint16_t directive, const char *msg, uint len)
+bool MainConnecter::Send(uint16_t directive, const void *msg, uint len)
 {
-	//COUT(tcc_("Send") << len);
-	MY_ASSERT(directive < Direct::_DirectEnd);
-	MY_ASSERT(hasSessionKey_);
-
-	if ((msg == nullptr && len > 0) || len > df::IocpOverlap::MAX_PACKAGE_SIZE)
+	if (msg == nullptr && len > 0)
 	{
 		COUT(tcc_("IocpConnecter::Send非法参数") << len);
 		BREAK_POINT_MSG("IocpConnecter::Send非法参数");
 		return false;
 	}
-
-	if (sock_ == 0)
-	{
-		return false;
-	}
-
-	//计算末尾补0数
-	uint8_t footZero = (len + packageHeaderSize_) % SessionCrypt_.KeySize;
-	if (footZero > 0)
-	{
-		footZero = SessionCrypt_.KeySize - footZero;
-	}
-
-
-	//新长度=包内容长+包头长+补0
-	uint newSize = len + headerSize_ + footZero;
-	auto io = df::IocpOverlap::New(newSize, this);
-
-	//COUT(tcc_("df::IocpOverlap::New ") << newSize);
-	uint8_t * hp = (uint8_t *)io->buffer_;
-
-	//4字节包长度
-	*(uint32_t*)hp = newSize - uncryptHeaderSize_;
-	hp += 4;
-
-	//1字节补0
-	*hp = footZero;
-	hp++;
-
-	//2字节指令码
-	*(uint16_t*)hp = directive;
-	hp += 2;
-
-	//包内容;
-	memcpy(hp, msg, len);
-	hp += len;
-
-	//补0
-	memset(hp, 0, footZero);
-	hp += footZero;
-
-	//4字节认证指令
-	uint16_t word1 = (uint16_t)rand();
-	uint16_t word2 = verifyWord_ ^ word1;
-	((uint16_t*)hp)[0] = word1;
-	((uint16_t*)hp)[1] = word2;
-
-	MY_ASSERT((newSize - uncryptHeaderSize_) % 16 == 0);
-
-	//从补0处开始加密
-	SessionCrypt_.Encrypt(io->buffer_ + uncryptHeaderSize_, io->buffer_ + uncryptHeaderSize_, newSize - uncryptHeaderSize_);
-
-	
-	return SendIocpOverlap(io, newSize);
+	return SendMsg(directive, len, [&](uint8_t * buf){
+		memcpy(buf, msg, len);
+	});
 }
 
 FileConnect * MainConnecter::DownloadFileInit()
 {
-	if (!file_)
-		file_.reset(new FileConnect);
-	return file_.get();
+	if (fileConnect_ && !fileConnect_->IsClosed())
+		return fileConnect_->file_.get();
+
+	auto con = df::IocpSocket::Connect<MainConnecter, false>(GetRemoteIpStr(), G::main.listen_port);
+	con->SessionCrypt_.InitByteKey(connectKey);
+	con->file_.reset(new FileConnect);
+	fileConnect_.Reset(con);
+
+	return fileConnect_->file_.get();
 }
 
-void MainConnecter::DownloadFileStart(const CC & remoteFile)
+bool MainConnecter::DownloadFileStart()
 {
-	auto con = df::IocpSocket::Connect<MainConnecter, false>(remoteFile, G::main.listen_port);
+	MY_ASSERT(fileConnect_ != false);
+
+	if (fileConnect_->file_->hasRecvIo_)
+	{
+		return fileConnect_->SendDownloadFile(fileConnect_->file_->transferedSize_, fileConnect_->file_->fileNameFrom_);
+	}
+
+	fileConnect_->StartRecvIo();
+	fileConnect_->file_->hasRecvIo_ = true;
+	return true;
+}
+
+bool MainConnecter::SendDownloadFile(long long pos, const CCa & fileName)
+{
+	if (pos < 0)
+		pos = 0;
+	uint len = sizeof(long long)+fileName.Length() + 1;
+
+	if (!file_)
+	{
+		BREAK_POINT_MSG("file_ 为空");
+		return false;
+	}
+	file_->state = FileConnect::StateDownload;
+
+	return SendMsg(Direct::DownloadFile, len, [&](uint8_t * buf){
+		*(long long*)buf = pos;
+		buf += sizeof(long long);
+		memcpy(buf, fileName.GetBuffer(), fileName.Size());
+		buf[fileName.Size()] = 0;
+	});
+}
+
+void MainConnecter::OnSend(char *, uint)
+{
+	if (!file_)
+		return;
+
+	if (file_->state == FileConnect::StateUpload)
+	{
+		if (file_->file_.IsClosed())//文件已关闭.返回错误
+		{
+			BREAK_POINT_MSG("文件句柄被关闭");
+			SendTrandsferError(TRANS_ERRCODE_HANDLE);
+			return;
+		}
+
+		if (!file_->file_.Read(file_->buf_, FileConnect::FileBufferSize))//读取完成
+		{
+			file_->state = FileConnect::StateNone;
+			Send(Direct::TransferComplete);
+			ON_EXIT({
+				file_->Clear();
+			});
+			file_->onCompleted_();
+
+			return;
+		}
+
+		file_->transferedSize_ += file_->file_.succeedByte_;
+
+		Send(Direct::RecvFileData, file_->buf_, file_->file_.succeedByte_);
+
+		file_->onTransfer_();
+
+
+		return;
+	}
 }
 
 
+bool MainConnecter::SendTrandsferError(const CC & err)
+{
+	SS s(err);
+	DirectFunc::FuncList[Direct::TransferError](this, s.GetBuffer(), s.Length());
+	return Send(Direct::TransferError, err);
+}

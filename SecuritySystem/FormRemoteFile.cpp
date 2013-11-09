@@ -12,6 +12,7 @@ FormRemoteFile::FormRemoteFile(ConnPtr & con)
 
 FormRemoteFile::~FormRemoteFile()
 {
+
 	con_->formFile_ = nullptr;
 }
 
@@ -35,7 +36,9 @@ void FormRemoteFile::OnInit()
 	comLocal_.Init(IDC_COMBO3);
 	comRemote_.Init(IDC_COMBO4);
 
-
+	buttonDownload_.onClick_ = [&](){
+		DownloadFile();
+	};
 
 
 	buttonLocalRet_.onClick_ = [&](){
@@ -79,6 +82,19 @@ void FormRemoteFile::OnInit()
 	viewQueue_.AddColumn(tcc_("文件队列"), 350);
 	viewQueue_.AddColumn(tcc_("大小"), 100);
 
+	onClose_ = [&](){
+		if (con_ && con_->IsTransfering())
+		{
+			if (MessageOK(tcc_("文件正在传输中,确认中断?")))
+			{
+				con_->fileConnect_->SendTrandsferError(TRANS_ERRCODE_USER_CLOSED);
+				Close();
+			}
+			return;
+		}
+
+		Close();
+	};
 
 	viewLocal_.Refresh();
 	GetRemoteFileList(tcc_(""));
@@ -176,4 +192,61 @@ void FormRemoteFile::RemoteMenuBack()
 	GetRemoteFileList(menu);
 
 	viewRemote_.SetFocus();
+}
+
+void FormRemoteFile::DownloadFile()
+{
+	if (con_ && con_->IsTransfering())
+	{
+		PopMessage(tcc_("已有文件正在传输中!"),600);
+		return;
+	}
+
+	int i = viewRemote_.GetSelectIndex();
+	if (i < remoteDirCount_)
+	{
+		PopMessage(tcc_("请选择要下载的文件!"));
+		return;
+	}
+
+	SS menuLocal = comLocal_.GetText();
+	if (menuLocal.Length() == 0)
+	{
+		PopMessage(tcc_("请选择本地储存目录!"));
+		return;
+	}
+
+	SS menuRemote = comRemote_.GetText();
+	SS fileName = viewRemote_.GetText(i, 0);
+
+	menuRemote << tcc_("\\") << fileName;
+	menuLocal << tcc_("\\") << fileName;
+
+
+
+	auto file = con_->DownloadFileInit();
+	file->transferedSize_ = 0;
+	file->fileNameFrom_ = std::move(menuRemote);
+	file->fileNameTo_ = std::move(menuLocal);
+
+	df::IntoPtr<FormRemoteFile> fPtr(this);
+
+	SS info;
+	file->onTransfer_ = [=]()mutable{
+		int rate = int(file->transferedSize_ * 100 / file->file_.GetFileSize());
+
+		info = tcc_("进度:");
+		info << rate << tcc_("%");
+		fPtr->textInfo_.SetText(info);
+		fPtr->progress_.SetProgressPos(rate);
+	};
+	file->onCompleted_ = [=]()mutable{
+		fPtr->textInfo_.SetText(tcc_("传输完成!"));
+	};
+
+	file->onError_ = [=](CC code, CC msg)mutable{
+		fPtr->MessageERR(tcc_("错误码:") + code + tcc_("\r\n") + msg);
+	};
+	if (!con_->DownloadFileStart())
+		MessageERR(tcc_("网络错误!"));
 }

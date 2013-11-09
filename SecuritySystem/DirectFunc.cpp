@@ -147,7 +147,7 @@ void DirectProc<Direct::ResponseMenu>::Func(MainConnecter * con, char * msg, uin
 		{
 			if (res[1].Length() != 1)//数据出错
 				return;
-			
+
 			if (res[1][0] != '2')
 			{
 				formPtr->viewRemote_.AddImageRow(res[1][0] - '0', res[0], res[2]);
@@ -165,6 +165,156 @@ void DirectProc<Direct::ResponseMenu>::Func(MainConnecter * con, char * msg, uin
 	for (int i = 0; i < fileList_.Count(); i++)
 	{
 		formPtr->viewRemote_.AddImageRow(2, fileList_[i], fileInfoList_[i]);
+	}
+}
+
+
+////服务器响应文件下载请求(8字节断点+文件名),返回8字节文件长度(小端)
+template<>
+void DirectProc<Direct::DownloadFile>::Func(MainConnecter * con, char * msg, uint len)
+{
+	if (len < 9)
+	{
+		BREAK_POINT_MSG("长度不对");
+		con->Close();
+		return;
+	}
+
+	long long pos = *(long long*)msg;
+	msg += sizeof(long long);
+	CC menu(msg);
+	if (menu.Length() == 0)
+	{
+		con->SendTrandsferError(TRANS_ERRCODE_INVALID_FILE);
+		return;
+	}
+
+	if (!con->file_)
+	{
+		con->file_.reset(new FileConnect);
+	}
+	con->file_->fileNameFrom_ = menu;
+	if (!con->file_->file_.Open(menu, false, false, true))
+	{
+		con->SendTrandsferError(TRANS_ERRCODE_OPEN_FAILED);
+		return;
+	}
+	auto fSize = con->file_->file_.GetFileSize();
+	con->file_->transferedSize_ = pos;
+	con->file_->file_.SeekStart(pos);
+	con->file_->state = FileConnect::StateUpload;
+	con->Send(Direct::ResponseDownload, &fSize, sizeof(long long));
+}
+
+//客户端接收8字节文件长度
+template<>
+void DirectProc<Direct::ResponseDownload>::Func(MainConnecter * con, char * msg, uint len)
+{
+	if (len < 8 || !con->file_)
+	{
+		BREAK_POINT_MSG("长度或参数不对");
+		con->Close();
+		return;
+	}
+	auto f = con->file_.get();
+	long long fileSize = *(long long*)msg;
+	if (fileSize < 0)
+		fileSize = 0;
+
+	if (!f->file_.Open(f->fileNameTo_, true, false, false))
+	{
+		con->SendTrandsferError(TRANS_ERRCODE_WRITE);
+		return;
+	}
+	f->file_.SetFileSizeVar(fileSize);
+	f->file_.SeekStart(f->transferedSize_);
+
+}
+
+template<>
+void DirectProc<Direct::Message>::Func(MainConnecter *, char * msg, uint)
+{
+	SS s(msg);
+	df::AsyncStart([=]{
+		df::msg(s);
+	});
+}
+
+template<>
+void DirectProc<Direct::RecvFileData>::Func(MainConnecter * con, char * msg, uint len)
+{
+	if (!con->file_)//发生错误
+	{
+		BREAK_POINT_MSG("con->file_不存在");
+		con->SendTrandsferError(TRANS_ERRCODE_UNKNOWN);
+		return;
+	}
+
+	auto & f = con->file_->file_;
+	if (f.IsClosed())
+	{
+		if (con->file_->state != FileConnect::StateNone)
+			con->SendTrandsferError(TRANS_ERRCODE_HANDLE);
+		return;
+	}
+	if (!f.Write(msg, len))
+	{
+		ERR(con->file_->fileNameTo_ + tcc_(" 文件写入失败!"));
+		con->SendTrandsferError(TRANS_ERRCODE_WRITE);
+		f.Close();
+		return;
+	}
+
+	con->file_->transferedSize_ += len;
+
+	if (con->file_->state != FileConnect::StateNone)
+		con->file_->onTransfer_();
+
+}
+
+template<>
+void DirectProc<Direct::TransferComplete>::Func(MainConnecter * con, char *, uint)
+{
+	if (!con->file_)//发生错误
+	{
+		BREAK_POINT_MSG("con->file_不存在");
+		con->SendTrandsferError(TRANS_ERRCODE_UNKNOWN);
+		return;
+	}
+
+	auto f = con->file_.get();
+	f->state = FileConnect::StateNone;
+	ON_EXIT({
+		f->Clear();
+	});
+	f->onCompleted_();
+}
+
+template<>
+void DirectProc<Direct::TransferError>::Func(MainConnecter * con, char * msg, uint len)
+{
+	CC res[2];
+
+	int i = 0;
+	CC::Split(msg, len, [&](CC c){
+		if (i > 1)
+		{
+			BREAK_POINT_MSG("数据错误!");
+			return false;
+		}
+		res[i] = c;
+		i++;
+		return true;
+	});
+	COUT("错误码:" << res[0] << " 消息:" << res[1]);
+
+	if (con->file_)
+	{
+		con->file_->state = FileConnect::StateNone;
+		ON_EXIT({
+			con->file_->Clear();
+		});
+		con->file_->onError_(res[0], res[1]);
 	}
 }
 
