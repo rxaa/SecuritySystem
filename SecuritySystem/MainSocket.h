@@ -6,6 +6,7 @@
 
 #include "FormCMD.h"
 #include "FormRemoteFile.h"
+#include "FormProc.h"
 
 void Sha2PasswordBuf(SS & psw, unsigned char sha2Res[32]);
 void Sha2Password(SS & psw);
@@ -28,7 +29,7 @@ struct FileConnect
 	//传输状态
 	int state = StateNone;
 	//文件已传输长度(通过初始化此值来进行断点续传)
-	long long transferedSize_ = 0;
+	int64_t transferedSize_ = 0;
 	//源文件名
 	SS fileNameFrom_;
 	//目标文件名
@@ -46,10 +47,16 @@ struct FileConnect
 	//出现错误(错误码,信息)
 	std::function < void(CC, CC)> onError_;
 
+	void WriteErrLog(const CC & code ,const CC & msg)
+	{
+		df::WriteLog(tcc_("code = ") + code + tcc_("\r\nmsg = ") + msg + tcc_("\r\n状态:") + state + tcc_("\r\nfileNameFrom_ = ")
+			+ fileNameFrom_ + tcc_("\r\nfileNameTo_ = ") + fileNameTo_ + tcc_("\r\ntransferedSize_ = ") + transferedSize_);
+	}
+
 	FileConnect()
 		: onTransfer_([](){})
 		, onCompleted_([](){})
-		, onError_([](CC, CC){})
+		, onError_([&](const CC & code, const CC & msg){WriteErrLog(code, msg); })
 	{
 	}
 
@@ -58,10 +65,17 @@ struct FileConnect
 		state = StateNone;
 		file_.Close();
 
-		//onTransfer_ = [](){};
-		//onCompleted_ = [](){};
-		//onError_ = [](CC, CC){};
+
 		transferedSize_ = 0;
+	}
+
+	void Release()
+	{
+		onTransfer_ = [](){};
+		onCompleted_ = [](){};
+		onError_ = [&](CC code, CC msg){
+			WriteErrLog(code, msg);
+		};
 	}
 
 	DISABLE_COPY_ASSIGN(FileConnect);
@@ -107,6 +121,8 @@ public:
 	//远程文件管理窗口
 	FormRemoteFile * formFile_ = nullptr;
 
+	FormProc * formProc_ = nullptr;
+
 	//会话加密
 	df::CryptAlg <df::CryptMode::AES_CBC> SessionCrypt_;
 
@@ -119,7 +135,7 @@ public:
 	void OnConnect() override;
 	void OnRecv(char *, uint) override;
 	void OnClosed() override;
-	bool Send(uint16_t directive, const void * msg, uint len);
+	bool Send(uint16_t directive, const void * msg, uint len, df::IocpOverlap ** overlapIO = nullptr);
 	bool Send(uint16_t directive)
 	{
 		return Send(directive, nullptr, 0);
@@ -130,20 +146,30 @@ public:
 		return Send(directive, str.char_, (str.length_ + 1) * sizeof(TCHAR));
 	}
 
-	void OnSend(char *, uint) override;
+	void OnSend(df::IocpOverlap *& io) override;
 
 	//新建文件传输连接(fileConnect_),失败抛df::WinException异常,传输结束后不会自动关闭此连接,以便再次复用
-	FileConnect * DownloadFileInit();
+	FileConnect * InitTransferFile();
 	//开始下载,失败抛df::WinException异常
-	bool DownloadFileStart();
+	bool StartDownloadFile();
+
+	//开始上传,失败抛df::WinException异常
+	bool StartUploadFile();
 
 	//*******************************************
 	// Summary : 发送下载文件命令
-	// Parameter - long long pos : 断点
+	// Parameter - int64_t pos : 断点
 	// Parameter - const CC & fileName : 文件
 	// Returns - bool : 
 	//*******************************************
-	bool SendDownloadFile(long long pos, const CC & fileName);
+	bool SendDownloadFile(int64_t pos, const CC & fileName);
+
+
+	//*******************************************
+	// Summary : 发送文件上传命令
+	// Returns - bool : 
+	//*******************************************
+	bool SendUploadFile();
 
 	//*******************************************
 	// Summary : 文件传输出错
@@ -158,7 +184,7 @@ public:
 	}
 
 	template<class Lamb>
-	bool SendMsg(uint16_t directive, uint len, Lamb lam)
+	bool SendMsg(uint16_t directive, uint len, Lamb lam, df::IocpOverlap ** overlapIO = nullptr)
 	{
 		//COUT(tcc_("Send") << len);
 		MY_ASSERT(directive < Direct::_DirectEnd);
@@ -186,7 +212,19 @@ public:
 
 		//新长度=包内容长+包头长+补0
 		uint newSize = len + headerSize_ + footZero;
-		auto io = df::IocpOverlap::New(newSize, this);
+		df::IocpOverlap * io;
+
+		//如果参数提供了overlapIO且大小合适,则复用
+		if (overlapIO && (*overlapIO)->bufSize_ >= newSize)
+		{
+			io = *overlapIO;
+			*overlapIO = nullptr;
+		}
+		else
+		{
+			io = df::IocpOverlap::New(newSize, this);
+		}
+
 
 		//COUT(tcc_("df::IocpOverlap::New ") << newSize);
 		uint8_t * hp = (uint8_t *)io->buffer_;

@@ -12,8 +12,7 @@ FormRemoteFile::FormRemoteFile(ConnPtr & con)
 
 FormRemoteFile::~FormRemoteFile()
 {
-
-	con_->formFile_ = nullptr;
+	FormClose();
 }
 
 void FormRemoteFile::OnInit()
@@ -38,6 +37,14 @@ void FormRemoteFile::OnInit()
 
 	buttonDownload_.onClick_ = [&](){
 		DownloadFile();
+	};
+
+	buttonUpload_.onClick_ = [&](){
+		UploadFile();
+	};
+
+	buttonDelete_.onClick_ = [&](){
+		DelFile();
 	};
 
 
@@ -88,11 +95,14 @@ void FormRemoteFile::OnInit()
 			if (MessageOK(tcc_("文件正在传输中,确认中断?")))
 			{
 				con_->fileConnect_->SendTrandsferError(TRANS_ERRCODE_USER_CLOSED);
+
+				FormClose();
 				Close();
 			}
 			return;
 		}
 
+		FormClose();
 		Close();
 	};
 
@@ -198,7 +208,7 @@ void FormRemoteFile::DownloadFile()
 {
 	if (con_ && con_->IsTransfering())
 	{
-		PopMessage(tcc_("已有文件正在传输中!"),600);
+		PopMessage(tcc_("已有文件正在传输中!"), 600);
 		return;
 	}
 
@@ -219,12 +229,12 @@ void FormRemoteFile::DownloadFile()
 	SS menuRemote = comRemote_.GetText();
 	SS fileName = viewRemote_.GetText(i, 0);
 
-	menuRemote << tcc_("\\") << fileName;
-	menuLocal << tcc_("\\") << fileName;
+	menuRemote << fileName;
+	menuLocal << fileName;
 
 
 
-	auto file = con_->DownloadFileInit();
+	auto file = con_->InitTransferFile();
 	file->transferedSize_ = 0;
 	file->fileNameFrom_ = std::move(menuRemote);
 	file->fileNameTo_ = std::move(menuLocal);
@@ -241,12 +251,104 @@ void FormRemoteFile::DownloadFile()
 		fPtr->progress_.SetProgressPos(rate);
 	};
 	file->onCompleted_ = [=]()mutable{
-		fPtr->textInfo_.SetText(tcc_("传输完成!"));
+		fPtr->textInfo_.SetText(file->fileNameFrom_ << tcc_("\r\n下载完成!"));
 	};
 
 	file->onError_ = [=](CC code, CC msg)mutable{
-		fPtr->MessageERR(tcc_("错误码:") + code + tcc_("\r\n") + msg);
+		file->WriteErrLog(code, msg);
+		info = tcc_("错误码:");
+		info << code << msg;
+		fPtr->textInfo_.AddText(info);
 	};
-	if (!con_->DownloadFileStart())
+	if (!con_->StartDownloadFile())
 		MessageERR(tcc_("网络错误!"));
+}
+
+void FormRemoteFile::UploadFile()
+{
+	if (con_ && con_->IsTransfering())
+	{
+		PopMessage(tcc_("已有文件正在传输中!"), 600);
+		return;
+	}
+
+	int i = viewLocal_.GetSelectIndex();
+	if (i < viewLocal_.GetDirList().Count())
+	{
+		PopMessage(tcc_("请选择要上传的文件!"));
+		return;
+	}
+
+	SS menuLocal = comLocal_.GetText();
+
+	SS menuRemote = comRemote_.GetText();
+	if (menuRemote.Length() == 0)
+	{
+		PopMessage(tcc_("请选择远程储存目录!"));
+		return;
+	}
+
+	SS fileName = viewLocal_.GetText(i, 0);
+
+	menuRemote << fileName;
+	menuLocal << fileName;
+
+
+
+	auto file = con_->InitTransferFile();
+	file->transferedSize_ = 0;
+	file->fileNameFrom_ = std::move(menuLocal);
+	file->fileNameTo_ = std::move(menuRemote);
+
+	df::IntoPtr<FormRemoteFile> fPtr(this);
+
+	SS info;
+	file->onTransfer_ = [=]()mutable{
+		int rate = int(file->transferedSize_ * 100 / file->file_.GetFileSize());
+
+		info = tcc_("进度:");
+		info << rate << tcc_("%");
+		fPtr->textInfo_.SetText(info);
+		fPtr->progress_.SetProgressPos(rate);
+	};
+	file->onCompleted_ = [=]()mutable{
+		fPtr->textInfo_.SetText(file->fileNameFrom_ << tcc_("\r\n上传完成!"));
+	};
+
+	file->onError_ = [=](CC code, CC msg)mutable{
+		file->WriteErrLog(code, msg);
+		info = tcc_("错误码:");
+		info << code << msg;
+		fPtr->textInfo_.AddText(info);
+	};
+	if (!con_->StartUploadFile())
+		MessageERR(tcc_("网络错误!"));
+}
+
+void FormRemoteFile::FormClose()
+{
+	con_->formFile_ = nullptr;
+}
+
+void FormRemoteFile::DelFile()
+{
+	int i = viewRemote_.GetSelectIndex();
+	if (i < remoteDirCount_)
+	{
+		PopMessage(tcc_("请选择要删除的文件!"));
+		return;
+	}
+
+	if (!MessageOK(tcc_("确定要删除所选文件?")))
+		return;
+
+	SS menuRemote = comRemote_.GetText() << viewRemote_.GetText(i, 0);
+
+	if (!con_->Send(Direct::DeleteFile, menuRemote))
+	{
+		MessageERR(tcc_("网络错误!"));
+		return;
+	}
+
+	buttonRemoteRefresh_.onClick_();
 }

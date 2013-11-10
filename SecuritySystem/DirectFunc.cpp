@@ -1,5 +1,6 @@
 ﻿#include "stdafx.h"
 #include "DirectFunc.h"
+#include "../../df/Proc.h"
 
 DirectFunc::DirectProcFunc DirectFunc::FuncList[Direct::_DirectEnd];
 
@@ -180,8 +181,8 @@ void DirectProc<Direct::DownloadFile>::Func(MainConnecter * con, char * msg, uin
 		return;
 	}
 
-	long long pos = *(long long*)msg;
-	msg += sizeof(long long);
+	int64_t pos = *(int64_t*)msg;
+	msg += sizeof(int64_t);
 	CC menu(msg);
 	if (menu.Length() == 0)
 	{
@@ -203,7 +204,7 @@ void DirectProc<Direct::DownloadFile>::Func(MainConnecter * con, char * msg, uin
 	con->file_->transferedSize_ = pos;
 	con->file_->file_.SeekStart(pos);
 	con->file_->state = FileConnect::StateUpload;
-	con->Send(Direct::ResponseDownload, &fSize, sizeof(long long));
+	con->Send(Direct::ResponseDownload, &fSize, sizeof(int64_t));
 }
 
 //客户端接收8字节文件长度
@@ -217,7 +218,7 @@ void DirectProc<Direct::ResponseDownload>::Func(MainConnecter * con, char * msg,
 		return;
 	}
 	auto f = con->file_.get();
-	long long fileSize = *(long long*)msg;
+	int64_t fileSize = *(int64_t*)msg;
 	if (fileSize < 0)
 		fileSize = 0;
 
@@ -253,8 +254,7 @@ void DirectProc<Direct::RecvFileData>::Func(MainConnecter * con, char * msg, uin
 	auto & f = con->file_->file_;
 	if (f.IsClosed())
 	{
-		if (con->file_->state != FileConnect::StateNone)
-			con->SendTrandsferError(TRANS_ERRCODE_HANDLE);
+		con->SendTrandsferError(TRANS_ERRCODE_HANDLE);
 		return;
 	}
 	if (!f.Write(msg, len))
@@ -283,9 +283,9 @@ void DirectProc<Direct::TransferComplete>::Func(MainConnecter * con, char *, uin
 	}
 
 	auto f = con->file_.get();
-	f->state = FileConnect::StateNone;
 	ON_EXIT({
 		f->Clear();
+		f->Release();
 	});
 	f->onCompleted_();
 }
@@ -310,11 +310,63 @@ void DirectProc<Direct::TransferError>::Func(MainConnecter * con, char * msg, ui
 
 	if (con->file_)
 	{
-		con->file_->state = FileConnect::StateNone;
 		ON_EXIT({
 			con->file_->Clear();
 		});
 		con->file_->onError_(res[0], res[1]);
+	}
+}
+
+template<>
+void DirectProc<Direct::UploadFile>::Func(MainConnecter * con, char * msg, uint len)
+{
+	if (len < 16)
+	{
+		BREAK_POINT_MSG("长度不对");
+		con->Close();
+		return;
+	}
+	int64_t size = *(int64_t*)msg;
+	msg += sizeof(int64_t);
+	int64_t pos = *(int64_t*)msg;
+	msg += sizeof(int64_t);
+	CC menu(msg);
+	if (menu.Length() == 0)
+	{
+		con->SendTrandsferError(TRANS_ERRCODE_INVALID_FILE);
+		return;
+	}
+
+	if (!con->file_)
+	{
+		con->file_.reset(new FileConnect);
+	}
+	con->file_->fileNameTo_ = menu;
+	if (!con->file_->file_.Open(menu,true,false,false))
+	{
+		con->SendTrandsferError(TRANS_ERRCODE_OPEN_FAILED);
+		return;
+	}
+	con->file_->file_.SetFileSizeVar(size);
+	con->file_->transferedSize_ = pos;
+	con->file_->file_.SeekStart(pos);
+	con->file_->state = FileConnect::StateDownload;
+}
+
+template<>
+void DirectProc<Direct::DeleteFile>::Func(MainConnecter * con, char * msg, uint len)
+{
+	if (len < 1)
+	{
+		con->Send(Direct::Message, tcc_("文件名不能为空!"));
+		return;
+	}
+		
+	CC name(msg);
+	if (!df::FileBin::DeleteFile(name))
+	{
+		ERR(name + tcc_("\r\n文件删除失败!"));
+		con->Send(Direct::Message, tcc_("文件删除失败!"));
 	}
 }
 

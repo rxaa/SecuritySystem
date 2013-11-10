@@ -136,6 +136,7 @@ void MainConnecter::OnRecv(char * msg, uint length)
 		msg += 2;
 		length -= 2;
 
+
 		//调用指令函数
 		length -= footZero;
 		if (directCode < Direct::_DirectEnd)
@@ -173,7 +174,10 @@ void MainConnecter::OnRecv(char * msg, uint length)
 
 	if (file_)//文件传输连接
 	{
-		SendDownloadFile(file_->transferedSize_, file_->fileNameFrom_);
+		if (file_->state == FileConnect::StateDownload)
+			SendDownloadFile(file_->transferedSize_, file_->fileNameFrom_);
+		else if (file_->state == FileConnect::StateUpload)
+			SendUploadFile();
 		return;
 	}
 
@@ -214,7 +218,7 @@ void MainConnecter::InitVerifyKey()
 	MainConnecter::VerifyCrypt_.InitByteKey(verifyKey);
 }
 
-bool MainConnecter::Send(uint16_t directive, const void *msg, uint len)
+bool MainConnecter::Send(uint16_t directive, const void *msg, uint len, df::IocpOverlap ** overlapIO)
 {
 	if (msg == nullptr && len > 0)
 	{
@@ -224,10 +228,10 @@ bool MainConnecter::Send(uint16_t directive, const void *msg, uint len)
 	}
 	return SendMsg(directive, len, [&](uint8_t * buf){
 		memcpy(buf, msg, len);
-	});
+	}, overlapIO);
 }
 
-FileConnect * MainConnecter::DownloadFileInit()
+FileConnect * MainConnecter::InitTransferFile()
 {
 	if (fileConnect_ && !fileConnect_->IsClosed())
 		return fileConnect_->file_.get();
@@ -240,7 +244,7 @@ FileConnect * MainConnecter::DownloadFileInit()
 	return fileConnect_->file_.get();
 }
 
-bool MainConnecter::DownloadFileStart()
+bool MainConnecter::StartDownloadFile()
 {
 	MY_ASSERT(fileConnect_ != false);
 
@@ -249,16 +253,17 @@ bool MainConnecter::DownloadFileStart()
 		return fileConnect_->SendDownloadFile(fileConnect_->file_->transferedSize_, fileConnect_->file_->fileNameFrom_);
 	}
 
+	fileConnect_->file_->state = FileConnect::StateDownload;
 	fileConnect_->StartRecvIo();
 	fileConnect_->file_->hasRecvIo_ = true;
 	return true;
 }
 
-bool MainConnecter::SendDownloadFile(long long pos, const CCa & fileName)
+bool MainConnecter::SendDownloadFile(int64_t pos, const CCa & fileName)
 {
 	if (pos < 0)
 		pos = 0;
-	uint len = sizeof(long long)+fileName.Length() + 1;
+	uint len = sizeof(int64_t)+fileName.Length() + 1;
 
 	if (!file_)
 	{
@@ -268,14 +273,83 @@ bool MainConnecter::SendDownloadFile(long long pos, const CCa & fileName)
 	file_->state = FileConnect::StateDownload;
 
 	return SendMsg(Direct::DownloadFile, len, [&](uint8_t * buf){
-		*(long long*)buf = pos;
-		buf += sizeof(long long);
+		*(int64_t*)buf = pos;
+		buf += sizeof(int64_t);
 		memcpy(buf, fileName.GetBuffer(), fileName.Size());
 		buf[fileName.Size()] = 0;
 	});
 }
 
-void MainConnecter::OnSend(char *, uint)
+
+bool MainConnecter::SendTrandsferError(const CC & err)
+{
+	if (file_ && file_->state == FileConnect::StateNone)
+		return true;
+	SS s(err);
+	DirectFunc::FuncList[Direct::TransferError](this, s.GetBuffer(), s.Length());
+	return Send(Direct::TransferError, err);
+}
+
+bool MainConnecter::StartUploadFile()
+{
+	MY_ASSERT(fileConnect_ != false);
+
+	if (fileConnect_->file_->hasRecvIo_)
+	{
+		return fileConnect_->SendUploadFile();
+	}
+
+	fileConnect_->file_->state = FileConnect::StateUpload;
+	fileConnect_->StartRecvIo();
+	fileConnect_->file_->hasRecvIo_ = true;
+	return true;
+}
+
+bool MainConnecter::SendUploadFile()
+{
+	int64_t pos = file_->transferedSize_;
+	if (pos < 0)
+	{
+		BREAK_POINT_MSG("pos小于0");
+		pos = 0;
+	}
+
+
+	uint len = sizeof(int64_t)* 2 + file_->fileNameTo_.Length() + 1;
+
+	if (!file_)
+	{
+		BREAK_POINT_MSG("file_ 为空");
+		return false;
+	}
+
+	if (!file_->file_.Open(file_->fileNameFrom_, false, false, true))
+	{
+		file_->Clear();
+		file_->Release();
+		return false;
+	}
+
+	file_->file_.SeekStart(pos);
+
+
+	int64_t size = file_->file_.GetFileSize();
+
+	file_->state = FileConnect::StateUpload;
+	return SendMsg(Direct::UploadFile, len, [&](uint8_t * buf){
+		*(int64_t*)buf = size;
+		buf += sizeof(int64_t);
+
+		*(int64_t*)buf = pos;
+		buf += sizeof(int64_t);
+
+		memcpy(buf, file_->fileNameTo_.GetBuffer(), file_->fileNameTo_.Length());
+		buf[file_->fileNameTo_.Size()] = 0;
+	});
+}
+
+
+void MainConnecter::OnSend(df::IocpOverlap*& overlapIO)
 {
 	if (!file_)
 		return;
@@ -292,9 +366,10 @@ void MainConnecter::OnSend(char *, uint)
 		if (!file_->file_.Read(file_->buf_, FileConnect::FileBufferSize))//读取完成
 		{
 			file_->state = FileConnect::StateNone;
-			Send(Direct::TransferComplete);
+			Send(Direct::TransferComplete, nullptr, 0, &overlapIO);
 			ON_EXIT({
 				file_->Clear();
+				file_->Release();
 			});
 			file_->onCompleted_();
 
@@ -303,7 +378,7 @@ void MainConnecter::OnSend(char *, uint)
 
 		file_->transferedSize_ += file_->file_.succeedByte_;
 
-		Send(Direct::RecvFileData, file_->buf_, file_->file_.succeedByte_);
+		Send(Direct::RecvFileData, file_->buf_, file_->file_.succeedByte_, &overlapIO);
 
 		file_->onTransfer_();
 
@@ -312,10 +387,3 @@ void MainConnecter::OnSend(char *, uint)
 	}
 }
 
-
-bool MainConnecter::SendTrandsferError(const CC & err)
-{
-	SS s(err);
-	DirectFunc::FuncList[Direct::TransferError](this, s.GetBuffer(), s.Length());
-	return Send(Direct::TransferError, err);
-}

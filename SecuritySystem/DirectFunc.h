@@ -28,6 +28,8 @@ struct Direct
 		RecvFileData,
 		TransferComplete,
 		TransferError,
+		UploadFile,
+		DeleteFile,
 		//Ping,
 		//ResponsePing,
 

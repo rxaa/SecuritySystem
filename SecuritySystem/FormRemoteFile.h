@@ -33,6 +33,7 @@ public:
 
 	int remoteDirCount_ = 0;
 	
+	void FormClose();
 
 	void OnInit() override;
 	void OnLayout() override;
@@ -45,5 +46,8 @@ public:
 
 	void DownloadFile();
 
+	void UploadFile();
+
+	void DelFile();
 };
 

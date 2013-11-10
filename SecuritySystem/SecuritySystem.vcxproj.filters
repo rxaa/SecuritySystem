@@ -269,6 +269,12 @@
     <ClInclude Include="..\..\window\FileListView.h">
       <Filter>Window</Filter>
     </ClInclude>
+    <ClInclude Include="FormProc.h">
+      <Filter>Form</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\df\Proc.h">
+      <Filter>df</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -323,6 +329,9 @@
       <Filter>df\socket</Filter>
     </ClCompile>
     <ClCompile Include="FormCMD.cpp">
+      <Filter>Form</Filter>
+    </ClCompile>
+    <ClCompile Include="FormProc.cpp">
       <Filter>Form</Filter>
     </ClCompile>
   </ItemGroup>

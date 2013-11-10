@@ -152,12 +152,19 @@ void FormMain::CommanLine()
 
 void FormMain::RemoteProcess()
 {
+	LOCKED(G::listLock_);
 	int i = viewHost_.GetSelectIndex();
-	if (i < 0)
+	if (i < 0 || i >= G::serverList_.Count())
 	{
 		PopHostErrMsg();
 		return;
 	}
+
+	auto & server = G::serverList_[i];
+	if (server->formProc_ != nullptr)
+		server->formProc_->SetActive();
+	else
+		NewWindow < FormProc>(server)->Open();
 }
 
 FormMain * FormMain::ptr_ = nullptr;
