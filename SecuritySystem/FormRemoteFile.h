@@ -1,4 +1,5 @@
 ﻿#pragma once
+#include "FormAttr.h"
 
 class FormRemoteFile :
 	public Window
@@ -29,7 +30,7 @@ public:
 	Control progress_;
 
 	ConnPtr con_;
-
+	df::IntoPtr<FormAttr> attrPtr_;
 
 	int remoteDirCount_ = 0;
 	
@@ -49,5 +50,7 @@ public:
 	void UploadFile();
 
 	void DelFile();
+
+	void FileAttr();
 };
 

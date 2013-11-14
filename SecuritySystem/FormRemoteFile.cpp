@@ -2,6 +2,7 @@
 #include "FormRemoteFile.h"
 
 
+
 FormRemoteFile::FormRemoteFile(ConnPtr & con)
 :con_(con)
 {
@@ -45,6 +46,10 @@ void FormRemoteFile::OnInit()
 
 	buttonDelete_.onClick_ = [&](){
 		DelFile();
+	};
+
+	buttonProperty_.onClick_ = [&](){
+		FileAttr();
 	};
 
 
@@ -294,7 +299,6 @@ void FormRemoteFile::UploadFile()
 	menuLocal << fileName;
 
 
-
 	auto file = con_->InitTransferFile();
 	file->transferedSize_ = 0;
 	file->fileNameFrom_ = std::move(menuLocal);
@@ -351,4 +355,19 @@ void FormRemoteFile::DelFile()
 	}
 
 	buttonRemoteRefresh_.onClick_();
+}
+
+void FormRemoteFile::FileAttr()
+{
+	int i = viewRemote_.GetSelectIndex();
+	if (i < remoteDirCount_)
+	{
+		PopMessage(tcc_("请选择文件!"));
+		return;
+	}
+
+	attrPtr_.Reset(NewWindow<FormAttr>(*this));
+	attrPtr_->menu_ = comRemote_.GetText();
+	attrPtr_->name_ = viewRemote_.GetText(i, 0);
+	attrPtr_->OpenModal(this);
 }

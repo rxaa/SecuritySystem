@@ -150,6 +150,7 @@
     <ClInclude Include="..\..\df\targetver.h" />
     <ClInclude Include="..\..\df\Thread.h" />
     <ClInclude Include="..\..\df\TickCLock.h" />
+    <ClInclude Include="..\..\df\Time.h" />
     <ClInclude Include="..\..\df\Utest.h" />
     <ClInclude Include="..\..\window\Bitmap.h" />
     <ClInclude Include="..\..\window\Button.h" />
@@ -176,6 +177,7 @@
     <ClInclude Include="FormConnect.h" />
     <ClInclude Include="FormLoad.h" />
     <ClInclude Include="FormProc.h" />
+    <ClInclude Include="FormAttr.h" />
     <ClInclude Include="FormRemoteFile.h" />
     <ClInclude Include="FormSet.h" />
     <ClInclude Include="G.h" />
@@ -202,6 +204,7 @@
     <ClCompile Include="FormLoad.cpp" />
     <ClCompile Include="FormMain.cpp" />
     <ClCompile Include="FormProc.cpp" />
+    <ClCompile Include="FormAttr.cpp" />
     <ClCompile Include="FormRemoteFile.cpp" />
     <ClCompile Include="FormSet.cpp" />
     <ClCompile Include="MainSocket.cpp" />

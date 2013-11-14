@@ -275,6 +275,12 @@
     <ClInclude Include="..\..\df\Proc.h">
       <Filter>df</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\df\Time.h">
+      <Filter>df</Filter>
+    </ClInclude>
+    <ClInclude Include="FormAttr.h">
+      <Filter>Form</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -332,6 +338,9 @@
       <Filter>Form</Filter>
     </ClCompile>
     <ClCompile Include="FormProc.cpp">
+      <Filter>Form</Filter>
+    </ClCompile>
+    <ClCompile Include="FormAttr.cpp">
       <Filter>Form</Filter>
     </ClCompile>
   </ItemGroup>

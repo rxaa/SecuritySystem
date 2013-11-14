@@ -30,6 +30,11 @@ struct Direct
 		TransferError,
 		UploadFile,
 		DeleteFile,
+		GetProcList,
+		ResponseProc,
+		KillProc,
+		GetAttr,
+		ResponseAttr,
 		//Ping,
 		//ResponsePing,
 

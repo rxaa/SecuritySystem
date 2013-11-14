@@ -1,5 +1,5 @@
 #±àÒë²ÎÊý
-compile_param=g++ -Wall -fexceptions -fexec-charset=GBK -finput-charset=GBK -g -D_DEBUG -march=pentium4  -std=c++11 -DWIN32 -D_TEST
+compile_param=g++ -Wall -fexceptions -fexec-charset=GBK -g -D_DEBUG -march=pentium4  -std=c++11 -DWIN32 -D_TEST
 
 #objÄ¿Â¼
 obj_menu=debug/obj/

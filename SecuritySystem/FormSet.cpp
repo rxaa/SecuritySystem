@@ -67,6 +67,15 @@ void FormSet::OnButtonOkClick()
 	df::StringToInteger(port, G::main.listen_port);
 
 	G::main.hide_window = choice_[0].GetCheck();
+
+	TextPSW_.GetText(port);
+	if (port.Length() > 0)
+	{
+		Sha2Password(port);
+		G::main.access_psw = std::move(port);
+	}
+		
+
 	G::WriteMainIni();
 	Close();
 }

@@ -342,7 +342,7 @@ void DirectProc<Direct::UploadFile>::Func(MainConnecter * con, char * msg, uint 
 		con->file_.reset(new FileConnect);
 	}
 	con->file_->fileNameTo_ = menu;
-	if (!con->file_->file_.Open(menu,true,false,false))
+	if (!con->file_->file_.Open(menu, true, false, false))
 	{
 		con->SendTrandsferError(TRANS_ERRCODE_OPEN_FAILED);
 		return;
@@ -361,7 +361,7 @@ void DirectProc<Direct::DeleteFile>::Func(MainConnecter * con, char * msg, uint 
 		con->Send(Direct::Message, tcc_("文件名不能为空!"));
 		return;
 	}
-		
+
 	CC name(msg);
 	if (!df::FileBin::DeleteFile(name))
 	{
@@ -369,6 +369,113 @@ void DirectProc<Direct::DeleteFile>::Func(MainConnecter * con, char * msg, uint 
 		con->Send(Direct::Message, tcc_("文件删除失败!"));
 	}
 }
+
+template<>
+void DirectProc<Direct::GetProcList>::Func(MainConnecter * con, char *, uint)
+{
+	SS li(256);
+	df::EachProcess([&](ProcInfo & info){
+		li << info.pid_ << tcc_("\n") << info.name_ << tcc_("\n");
+	});
+
+	con->Send(Direct::ResponseProc, li);
+}
+
+template<>
+void DirectProc<Direct::ResponseProc>::Func(MainConnecter * con, char *msg, uint len)
+{
+
+	if (con->formProc_ == nullptr)
+		return;
+	df::IntoPtr < FormProc> formPtr(con->formProc_);
+
+	formPtr->viewProc_.Clear();
+	CC res[2];
+	int i = 0;
+	int count = 0;
+	CC::Split(msg, len, [&](CC c){
+		res[i++] = c;
+
+		if (i >= 2)
+		{
+			count++;
+			formPtr->viewProc_.AddRow(res[0], res[1]);
+			i = 0;
+		}
+	});
+
+	formPtr->textCount_.SetText(tcc_("进程数:") + count);
+
+}
+
+
+template<>
+void DirectProc<Direct::KillProc>::Func(MainConnecter * con, char * msg, uint)
+{
+	uint pid = 0;
+	df::StrToVar(msg, pid);
+	df::Proc pro;
+	if (!pro.Open(pid) || !pro.Terminate())
+	{
+		con->Send(Direct::Message, tcc_("进程结束失败!"));
+		return;
+	}
+
+}
+
+
+template<>
+void DirectProc<Direct::GetAttr>::Func(MainConnecter * con, char * msg, uint)
+{
+	WIN32_FILE_ATTRIBUTE_DATA wfad;
+	if (!::GetFileAttributesEx(msg, GetFileExInfoStandard, &wfad))
+	{
+		ERR(tcc_("GetFileAttributesEx failed"));
+		con->Send(Direct::Message, tcc_("属性获取失败!"));
+		return;
+	}
+
+	SS str(64);
+	df::Time::FileTimeToStr(wfad.ftCreationTime, str) << tcc_("\n");
+	df::Time::FileTimeToStr(wfad.ftLastWriteTime, str) << tcc_("\n")
+		<< wfad.dwFileAttributes << tcc_("\n");
+
+	con->Send(Direct::ResponseAttr, str);
+}
+
+template<>
+void DirectProc<Direct::ResponseAttr>::Func(MainConnecter * con, char * msg, uint len)
+{
+	if (con->formFile_ == nullptr)
+		return;
+
+	df::IntoPtr < FormRemoteFile> formFilePtr(con->formFile_);
+
+	if (!formFilePtr->attrPtr_)
+		return;
+
+	auto & formPtr = formFilePtr->attrPtr_;
+
+
+	CC res[3];
+	int i = 0;
+	CC::Split(msg, len, [&](CC c){
+		res[i++] = c;
+		if (i >= 3)
+		{
+			SS text = tcc_("创建时间：");
+			text << res[0] << tcc_("\r\n最后修改：") << res[1];
+			formPtr->textTime_.SetText(text);
+			formPtr->ShowAttr(res[2]);
+			return false;
+		}
+		return true;
+	});
+
+
+}
+
+
 
 template<unsigned I>
 struct InitProc

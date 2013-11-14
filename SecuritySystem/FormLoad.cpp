@@ -38,6 +38,7 @@ void FormLoad::OnPaint()
 
 void FormLoad::OnTimer(uint)
 {
+
 	picI_++;
 	if (picI_ >= picCount_)
 		picI_ = 0;

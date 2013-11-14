@@ -18,4 +18,5 @@ void FormAbout::OnInit()
 	butOK_.onClick_ = [&]{
 		Close();
 	};
+
 }

@@ -28,6 +28,7 @@
 #define IDD_CMD                         142
 #define IDD_DIALOG3                     143
 #define IDD_PROC                        143
+#define IDD_PROP                        144
 #define IDC_LIST1                       1000
 #define IDC_BUTTON1                     1001
 #define IDC_SYSLINK1                    1002
@@ -51,6 +52,8 @@
 #define IDC_LIST4                       1018
 #define IDC_COMBO3                      1019
 #define IDC_COMBO4                      1020
+#define IDC_CHECK3                      1020
+#define IDC_CHECK4                      1021
 #define ID_32771                        32771
 #define ID_32772                        32772
 #define ID_32773                        32773
@@ -69,9 +72,9 @@
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NO_MFC                     1
-#define _APS_NEXT_RESOURCE_VALUE        144
+#define _APS_NEXT_RESOURCE_VALUE        145
 #define _APS_NEXT_COMMAND_VALUE         32782
-#define _APS_NEXT_CONTROL_VALUE         1020
+#define _APS_NEXT_CONTROL_VALUE         1022
 #define _APS_NEXT_SYMED_VALUE           110
 #endif
 #endif
