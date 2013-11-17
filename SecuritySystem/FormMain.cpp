@@ -126,7 +126,7 @@ void FormMain::RemoteFile()
 		return;
 	}
 	auto & server = G::serverList_[i];
-	if (server->formFile_ != nullptr)
+	if (server->formFile_ != nullptr && !server->formFile_->IsClosed())
 		server->formFile_->SetActive();
 	else
 		NewWindow<FormRemoteFile>(server)->Open();
@@ -144,7 +144,7 @@ void FormMain::CommanLine()
 	}
 
 	auto & server = G::serverList_[i];
-	if (server->formCmdPtr_ != nullptr)
+	if (server->formCmdPtr_ != nullptr && !server->formCmdPtr_->IsClosed())
 		server->formCmdPtr_->SetActive();
 	else
 		NewWindow < FormCMD>(server)->Open();
@@ -161,7 +161,7 @@ void FormMain::RemoteProcess()
 	}
 
 	auto & server = G::serverList_[i];
-	if (server->formProc_ != nullptr)
+	if (server->formProc_ != nullptr && !server->formProc_->IsClosed())
 		server->formProc_->SetActive();
 	else
 		NewWindow < FormProc>(server)->Open();

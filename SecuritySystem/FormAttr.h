@@ -16,12 +16,15 @@ public:
 	TextBox textTime_;
 	ChoiceBox choice_;
 
-	static const uint AttrList[4];
+	static const uint AttrList[];
 
 	SS name_;
 	SS menu_;
 	
 	void OnInit() override;
 	void ShowAttr(CC attr);
+
+	void Rename();
+	void ReAttr();
 };
 

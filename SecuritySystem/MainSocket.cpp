@@ -365,7 +365,6 @@ void MainConnecter::OnSend(df::IocpOverlap*& overlapIO)
 
 		if (!file_->file_.Read(file_->buf_, FileConnect::FileBufferSize))//读取完成
 		{
-			file_->state = FileConnect::StateNone;
 			Send(Direct::TransferComplete, nullptr, 0, &overlapIO);
 			ON_EXIT({
 				file_->Clear();

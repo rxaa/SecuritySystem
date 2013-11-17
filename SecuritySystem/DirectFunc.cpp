@@ -60,9 +60,9 @@ void DirectProc<Direct::GetCmd>::Func(MainConnecter * con, char * msg, uint)
 
 		ConnPtr ptr(con);
 
-		df::AsyncStart([=]{
+		df::AsyncStart([=] {
 
-			ptr->cmd_->Read([&](CC str){
+			ptr->cmd_->Read([&](CC str) {
 				ptr->Send(Direct::ResponseCmd, str);
 			});
 
@@ -101,7 +101,7 @@ void DirectProc<Direct::GetMenu>::Func(MainConnecter * con, char *msg, uint)
 	//目录类型:0磁盘,1目录,2文件
 	if (menu.Length() == 0)
 	{
-		df::EachDisk([&](DiskInfo & disk){
+		df::EachDisk([&](DiskInfo & disk) {
 			res << disk.name_ << tcc_("\n0\n");
 			res << DiskInfo::typeInfo[disk.type_];
 			res.AddByte(disk.freeSize_) << cct_(" / ");
@@ -110,7 +110,7 @@ void DirectProc<Direct::GetMenu>::Func(MainConnecter * con, char *msg, uint)
 	}
 	else
 	{
-		df::EachDir(menu, [&](FileInfo & file){
+		df::EachDir(menu, [&](FileInfo & file) {
 			if (file.IsDir())
 			{
 				res << file.name_ << tcc_("\n1\n\n");
@@ -141,7 +141,7 @@ void DirectProc<Direct::ResponseMenu>::Func(MainConnecter * con, char * msg, uin
 	formPtr->viewRemote_.Clear();
 	int i = 0;
 	CC res[3];
-	CC::Split(msg, len, [&](CC c){
+	CC::Split(msg, len, [&](CC c) {
 		res[i] = c;
 		i++;
 		if (i >= 3)
@@ -222,13 +222,16 @@ void DirectProc<Direct::ResponseDownload>::Func(MainConnecter * con, char * msg,
 	if (fileSize < 0)
 		fileSize = 0;
 
+
 	if (!f->file_.Open(f->fileNameTo_, true, false, false))
 	{
 		con->SendTrandsferError(TRANS_ERRCODE_WRITE);
 		return;
 	}
-	f->file_.SetFileSizeVar(fileSize);
 	f->file_.SeekStart(f->transferedSize_);
+
+
+	f->file_.SetFileSizeVar(fileSize);
 
 }
 
@@ -236,7 +239,7 @@ template<>
 void DirectProc<Direct::Message>::Func(MainConnecter *, char * msg, uint)
 {
 	SS s(msg);
-	df::AsyncStart([=]{
+	df::AsyncStart([=] {
 		df::msg(s);
 	});
 }
@@ -261,7 +264,6 @@ void DirectProc<Direct::RecvFileData>::Func(MainConnecter * con, char * msg, uin
 	{
 		ERR(con->file_->fileNameTo_ + tcc_(" 文件写入失败!"));
 		con->SendTrandsferError(TRANS_ERRCODE_WRITE);
-		f.Close();
 		return;
 	}
 
@@ -296,7 +298,7 @@ void DirectProc<Direct::TransferError>::Func(MainConnecter * con, char * msg, ui
 	CC res[2];
 
 	int i = 0;
-	CC::Split(msg, len, [&](CC c){
+	CC::Split(msg, len, [&](CC c) {
 		if (i > 1)
 		{
 			BREAK_POINT_MSG("数据错误!");
@@ -374,7 +376,7 @@ template<>
 void DirectProc<Direct::GetProcList>::Func(MainConnecter * con, char *, uint)
 {
 	SS li(256);
-	df::EachProcess([&](ProcInfo & info){
+	df::EachProcess([&](ProcInfo & info) {
 		li << info.pid_ << tcc_("\n") << info.name_ << tcc_("\n");
 	});
 
@@ -393,7 +395,7 @@ void DirectProc<Direct::ResponseProc>::Func(MainConnecter * con, char *msg, uint
 	CC res[2];
 	int i = 0;
 	int count = 0;
-	CC::Split(msg, len, [&](CC c){
+	CC::Split(msg, len, [&](CC c) {
 		res[i++] = c;
 
 		if (i >= 2)
@@ -459,7 +461,7 @@ void DirectProc<Direct::ResponseAttr>::Func(MainConnecter * con, char * msg, uin
 
 	CC res[3];
 	int i = 0;
-	CC::Split(msg, len, [&](CC c){
+	CC::Split(msg, len, [&](CC c) {
 		res[i++] = c;
 		if (i >= 3)
 		{
@@ -475,6 +477,42 @@ void DirectProc<Direct::ResponseAttr>::Func(MainConnecter * con, char * msg, uin
 
 }
 
+template<>
+void DirectProc<Direct::ReName>::Func(MainConnecter * con, char * msg, uint len)
+{
+	CC res[2];
+	int i = 0;
+	CC::Split(msg, len, [&](CC c) {
+		res[i++] = c;
+		if (i >= 2)
+		{
+			if (df::FileBin::Rename(res[0], res[1]))
+				con->Send(Direct::Message, tcc_("修改成功!"));
+			else
+				con->Send(Direct::Message, tcc_("修改失败!"));
+		}
+	});
+}
+
+template<>
+void DirectProc<Direct::ReAttr>::Func(MainConnecter * con, char * msg, uint len)
+{
+	CC res[2];
+	int i = 0;
+	CC::Split(msg, len, [&](CC c) {
+		res[i++] = c;
+		if (i >= 2)
+		{
+			DWORD at = 0;
+			df::StrToVar(res[1], at);
+			if (SetFileAttributes(res[0].GetBuffer(), at))
+				con->Send(Direct::Message, tcc_("修改成功!"));
+			else
+				con->Send(Direct::Message, tcc_("修改失败!"));
+		}
+	});
+
+}
 
 
 template<unsigned I>

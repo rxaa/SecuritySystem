@@ -22,6 +22,10 @@ void FormProc::OnInit()
 	viewProc_.Init(IDC_LIST1);
 	textCount_.Init(IDC_EDIT1);
 	buttonRsfresh_.Init(IDC_BUTTON1);
+
+
+
+
 	buttonRsfresh_.onClick_ = [&](){
 		con_->Send(Direct::GetProcList);
 		viewProc_.SetFocus();
@@ -41,9 +45,21 @@ void FormProc::OnInit()
 	viewProc_.marginRight_ = 10;
 	viewProc_.marginBottom_ = butOK_.GetHeight() + 15;
 
-
 	butOK_.onClick_ = [&]{
+		Kill();
 	};
 
 	con_->Send(Direct::GetProcList);
+}
+
+void FormProc::Kill()
+{
+	int i = viewProc_.GetSelectIndex();
+	if (i < 0)
+	{
+		PopMessage(tcc_("请选择一个进程!"));
+		return;
+	}
+	SS id = viewProc_.GetText(i, 0);
+	con_->Send(Direct::KillProc, id);		
 }

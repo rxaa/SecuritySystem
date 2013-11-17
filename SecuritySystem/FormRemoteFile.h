@@ -33,7 +33,7 @@ public:
 	df::IntoPtr<FormAttr> attrPtr_;
 
 	int remoteDirCount_ = 0;
-	
+
 	void FormClose();
 
 	void OnInit() override;
@@ -52,5 +52,16 @@ public:
 	void DelFile();
 
 	void FileAttr();
+
+	void OnTransfer(FileConnect * fileCon);
+	void OnCompleted(FileConnect * fileCon);
+	void OnError(FileConnect * fileCon,CC code,CC msg);
+
+	//文件传输状态信息
+	SS tranState_;
+	//记录时间间隔
+	long timeTick_ = 0;
+	//时间间隔内传输长度
+	int64_t succedByte_ = 0;
 };
 

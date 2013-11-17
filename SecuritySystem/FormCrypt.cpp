@@ -296,6 +296,7 @@ void FormCrypt::OnDecryptClick()
 	});
 }
 
+
 void FormCrypt::ViewClick(int i)
 {
 	if (i < 0 || i < dirList_.listDir_.Size() || isCrypting_)

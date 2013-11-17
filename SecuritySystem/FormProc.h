@@ -15,5 +15,8 @@ public:
 	ConnPtr con_;
 	
 	void OnInit() override;
+
+
+	void Kill();
 };
 

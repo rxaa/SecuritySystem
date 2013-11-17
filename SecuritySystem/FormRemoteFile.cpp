@@ -1,7 +1,11 @@
 ﻿#include "stdafx.h"
 #include "FormRemoteFile.h"
 
-
+CC stateMsg[] = {
+	tcc_("完成"),
+	tcc_("下载"),
+	tcc_("上传"),
+};
 
 FormRemoteFile::FormRemoteFile(ConnPtr & con)
 :con_(con)
@@ -36,40 +40,40 @@ void FormRemoteFile::OnInit()
 	comLocal_.Init(IDC_COMBO3);
 	comRemote_.Init(IDC_COMBO4);
 
-	buttonDownload_.onClick_ = [&](){
+	buttonDownload_.onClick_ = [&]() {
 		DownloadFile();
 	};
 
-	buttonUpload_.onClick_ = [&](){
+	buttonUpload_.onClick_ = [&]() {
 		UploadFile();
 	};
 
-	buttonDelete_.onClick_ = [&](){
+	buttonDelete_.onClick_ = [&]() {
 		DelFile();
 	};
 
-	buttonProperty_.onClick_ = [&](){
+	buttonProperty_.onClick_ = [&]() {
 		FileAttr();
 	};
 
 
-	buttonLocalRet_.onClick_ = [&](){
+	buttonLocalRet_.onClick_ = [&]() {
 		comLocal_.SetText(viewLocal_.Back());
 		viewLocal_.SetFocus();
 	};
 
 
-	buttonLocalRefresh_.onClick_ = [&](){
+	buttonLocalRefresh_.onClick_ = [&]() {
 		comLocal_.GetText(viewLocal_.currentMenu_);
 		viewLocal_.Refresh();
 		viewLocal_.SetFocus();
 	};
 
-	buttonRemoteRet_.onClick_ = [&](){
+	buttonRemoteRet_.onClick_ = [&]() {
 		RemoteMenuBack();
 	};
 
-	buttonRemoteRefresh_.onClick_ = [&](){
+	buttonRemoteRefresh_.onClick_ = [&]() {
 		GetRemoteFileList(comRemote_.GetText());
 		viewRemote_.SetFocus();
 	};
@@ -78,7 +82,7 @@ void FormRemoteFile::OnInit()
 	viewLocal_.AddColumn(tcc_("大小"));
 	viewLocal_.InitImage(IDB_BITMAP3, IDB_BITMAP2, IDB_BITMAP4);
 
-	viewLocal_.onDoubleClick_ = [&](int i){
+	viewLocal_.onDoubleClick_ = [&](int i) {
 		comLocal_.SetText(viewLocal_.NaviMenu(i));
 	};
 
@@ -86,7 +90,7 @@ void FormRemoteFile::OnInit()
 	viewRemote_.AddColumn(tcc_("远程文件"), 300);
 	viewRemote_.AddColumn(tcc_("大小"));
 	viewRemote_.SetImageList(viewLocal_.GetImageList());
-	viewRemote_.onDoubleClick_ = [&](int i){
+	viewRemote_.onDoubleClick_ = [&](int i) {
 		RemoteDoubleClick(i);
 	};
 
@@ -94,7 +98,7 @@ void FormRemoteFile::OnInit()
 	viewQueue_.AddColumn(tcc_("文件队列"), 350);
 	viewQueue_.AddColumn(tcc_("大小"), 100);
 
-	onClose_ = [&](){
+	onClose_ = [&]() {
 		if (con_ && con_->IsTransfering())
 		{
 			if (MessageOK(tcc_("文件正在传输中,确认中断?")))
@@ -239,32 +243,35 @@ void FormRemoteFile::DownloadFile()
 
 
 
+
 	auto file = con_->InitTransferFile();
-	file->transferedSize_ = 0;
+
+	{
+		df::FileBin ff;
+		if (ff.Open(menuLocal, false, false, true, false))
+			file->transferedSize_ = ff.GetFileSize();
+		else
+			file->transferedSize_ = 0;
+	}
+
+
 	file->fileNameFrom_ = std::move(menuRemote);
 	file->fileNameTo_ = std::move(menuLocal);
 
 	df::IntoPtr<FormRemoteFile> fPtr(this);
 
-	SS info;
-	file->onTransfer_ = [=]()mutable{
-		int rate = int(file->transferedSize_ * 100 / file->file_.GetFileSize());
-
-		info = tcc_("进度:");
-		info << rate << tcc_("%");
-		fPtr->textInfo_.SetText(info);
-		fPtr->progress_.SetProgressPos(rate);
+	file->onTransfer_ = [=]() {
+		fPtr->OnTransfer(file);
 	};
-	file->onCompleted_ = [=]()mutable{
-		fPtr->textInfo_.SetText(file->fileNameFrom_ << tcc_("\r\n下载完成!"));
+	file->onCompleted_ = [=]() {
+		fPtr->OnCompleted(file);
 	};
 
-	file->onError_ = [=](CC code, CC msg)mutable{
-		file->WriteErrLog(code, msg);
-		info = tcc_("错误码:");
-		info << code << msg;
-		fPtr->textInfo_.AddText(info);
+	file->onError_ = [=](CC code, CC msg) {
+		fPtr->OnError(file, code, msg);
 	};
+
+
 	if (!con_->StartDownloadFile())
 		MessageERR(tcc_("网络错误!"));
 }
@@ -306,25 +313,17 @@ void FormRemoteFile::UploadFile()
 
 	df::IntoPtr<FormRemoteFile> fPtr(this);
 
-	SS info;
-	file->onTransfer_ = [=]()mutable{
-		int rate = int(file->transferedSize_ * 100 / file->file_.GetFileSize());
-
-		info = tcc_("进度:");
-		info << rate << tcc_("%");
-		fPtr->textInfo_.SetText(info);
-		fPtr->progress_.SetProgressPos(rate);
+	file->onTransfer_ = [=]() {
+		fPtr->OnTransfer(file);
 	};
-	file->onCompleted_ = [=]()mutable{
-		fPtr->textInfo_.SetText(file->fileNameFrom_ << tcc_("\r\n上传完成!"));
+	file->onCompleted_ = [=]()mutable {
+		fPtr->OnCompleted(file);
 	};
 
-	file->onError_ = [=](CC code, CC msg)mutable{
-		file->WriteErrLog(code, msg);
-		info = tcc_("错误码:");
-		info << code << msg;
-		fPtr->textInfo_.AddText(info);
+	file->onError_ = [=](CC code, CC msg)mutable {
+		fPtr->OnError(file, code, msg);
 	};
+
 	if (!con_->StartUploadFile())
 		MessageERR(tcc_("网络错误!"));
 }
@@ -370,4 +369,53 @@ void FormRemoteFile::FileAttr()
 	attrPtr_->menu_ = comRemote_.GetText();
 	attrPtr_->name_ = viewRemote_.GetText(i, 0);
 	attrPtr_->OpenModal(this);
+}
+
+void FormRemoteFile::OnTransfer(FileConnect * fileCon)
+{
+	long t = df::GetTickMilli();
+	//每500毫秒显示进度
+	if (t - timeTick_ < 500)
+		return;
+
+	//用于计算每秒传输速度
+	double mul = 1000.0 / (t - timeTick_);
+
+	timeTick_ = t;
+
+	//百分比
+	int rate = int(fileCon->transferedSize_ * 100 / fileCon->file_.GetFileSize());
+
+	tranState_ = tcc_("正在");
+	tranState_ << stateMsg[fileCon->state] << ":\r\n" << fileCon->fileNameFrom_
+		<< "\r\n大小: ";
+	tranState_.AddByte(fileCon->file_.GetFileSize())
+		<< "\r\n速度: ";
+	tranState_.AddByte(int64_t((fileCon->transferedSize_ - succedByte_) * mul)) << " /s"
+		<< tcc_("\r\n进度: ") << rate << tcc_("%  ");
+	tranState_.AddByte(fileCon->transferedSize_);
+
+	textInfo_.SetText(tranState_);
+	progress_.SetProgressPos(rate);
+	succedByte_ = fileCon->transferedSize_;
+}
+
+void FormRemoteFile::OnCompleted(FileConnect * fileCon)
+{
+	tranState_ = fileCon->fileNameFrom_;
+	tranState_ << "\r\n文件" << stateMsg[fileCon->state] << "完成!";
+	textInfo_.SetText(tranState_);
+	progress_.SetProgressPos(100);
+	succedByte_ = 0;
+}
+
+void FormRemoteFile::OnError(FileConnect * fileCon, CC code, CC msg)
+{
+	fileCon->WriteErrLog(code, msg);
+	tranState_ = fileCon->fileNameFrom_;
+	tranState_ << "\r\n文件" << stateMsg[fileCon->state] << "失败!";
+	tranState_ << tcc_("\r\n错误码:");
+	tranState_ << code << msg;
+	textInfo_.AddText(tranState_);
+	succedByte_ = 0;
 }

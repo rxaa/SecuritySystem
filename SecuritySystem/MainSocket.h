@@ -4,6 +4,8 @@
 #include "../../df/cryptology/Crypt.h"
 #include "../../df/cmd.h"
 
+struct FileConnect;
+
 #include "FormCMD.h"
 #include "FormRemoteFile.h"
 #include "FormProc.h"

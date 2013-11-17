@@ -35,6 +35,9 @@ struct Direct
 		KillProc,
 		GetAttr,
 		ResponseAttr,
+		ReName,
+		ReAttr,
+
 		//Ping,
 		//ResponsePing,
 

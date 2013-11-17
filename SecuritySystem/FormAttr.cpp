@@ -1,7 +1,7 @@
 ﻿#include "StdAfx.h"
 #include "FormAttr.h"
 
-const uint FormAttr::AttrList[4] =
+const uint FormAttr::AttrList[] =
 {
 	FileAttribute::HIDDEN,
 	FileAttribute::SYSTEM,
@@ -24,7 +24,8 @@ FormAttr::~FormAttr(void)
 void FormAttr::OnInit()
 {
 	butOK_.Init(IDOK);
-	butOK_.onClick_ = [&]{
+	butOK_.onClick_ = [&] {
+		ReAttr();
 		Close();
 	};
 
@@ -35,6 +36,10 @@ void FormAttr::OnInit()
 	choice_.AddItem(IDC_CHECK2);
 	choice_.AddItem(IDC_CHECK3);
 	choice_.AddItem(IDC_CHECK4);
+
+	buttonName_.onClick_ = [&] {
+		Rename();
+	};
 
 	textName_.SetText(name_);
 
@@ -51,3 +56,31 @@ void FormAttr::ShowAttr(CC attr)
 	}
 }
 
+void  FormAttr::Rename()
+{
+	SS newName = textName_.GetText();
+	if (newName.Length() == 0)
+	{
+		PopMessage(tcc_("请输入文件名!"));
+		return;
+	}
+
+	SS msg = menu_ + name_ + tcc_("\n") + menu_ + newName;
+	formFile_.con_->Send(Direct::ReName, msg);
+
+}
+
+void FormAttr::ReAttr()
+{
+	uint attr = 0;
+	int i = 0;
+	for (auto a : choice_)
+	{
+		attr |= a->GetCheck() * AttrList[i];
+		i++;
+	}
+
+	SS msg;
+	msg << menu_ << name_ << tcc_("\n") << attr;
+	formFile_.con_->Send(Direct::ReAttr, msg);
+}
